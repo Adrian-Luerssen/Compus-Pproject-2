@@ -1,0 +1,131 @@
+LIST P = PIC18F4321 F = INHX32
+    #include <p18f4321.inc>
+    CONFIG OSC = INTIO2
+    CONFIG PBADEN = DIG
+    CONFIG WDT = OFF
+    
+    readH EQU 0x01
+    readL EQU 0x02
+    
+    returnFlag EQU 0x04
+    position EQU 0x03
+ 
+    ORG 0x0000
+    GOTO MAIN
+    ORG 0x0008
+    RETFIE FAST
+    ORG 0x0018
+    RETFIE FAST
+    
+    INIT_OSC
+	MOVLW b'01000010'    ; 1MHz 1us
+	MOVWF   OSCCON,0 
+	RETURN
+	
+    INIT_TMR0
+	MOVLW b'10011000' ; 16 bit timer - no prescaler 
+	MOVWF T0CON,0
+	RETURN
+    INIT_PORTS
+	MOVLW b'00000011'
+	MOVWF ADCON0,0
+	MOVLW b'00001110'
+	MOVWF ADCON1,0
+	MOVLW b'10001001'
+	MOVWF ADCON2,0
+	BSF TRISA,0,0
+	CLRF TRISC,0
+	CLRF TRISD,0
+	RETURN
+
+    READ_VALUE
+	MOVFF ADRESH,readH
+	MOVFF ADRESL,readL
+	RETURN
+	
+	
+	
+    CHECK_LEFT
+	
+	; checking if < 100
+	MOVLW .1
+	CPFSLT readH,0
+	RETURN
+	MOVLW LOW(.100)
+	CPFSLT readL,0
+	RETURN
+	; threshold for centre is left < 100
+	
+	MOVLW .0
+	SUBWF position,0
+	BTFSS STATUS,Z,0
+	DECF position,1
+	
+	SETF returnFlag
+	RETURN
+	
+    CHECK_RIGHT
+	;checking if > 900
+	MOVLW .2
+	CPFSGT readH,0
+	RETURN
+	MOVLW LOW(.900)
+	CPFSGT readL,0
+	RETURN
+	
+	; threshold for centre is 900 < right
+	
+	MOVLW .7
+	SUBWF position,0
+	BTFSS STATUS,Z,0
+	INCF position,1
+	SETF returnFlag
+	
+	RETURN
+	
+    CHECK_CENTRE
+	;checking if > 450
+	MOVLW .1
+	CPFSEQ readH,0
+	GOTO check2
+	MOVLW .200
+	CPFSGT readL,0
+	RETURN
+	GOTO middle
+	
+	; checking if < 550
+	check2
+	MOVLW .2
+	CPFSEQ readH,0
+	RETURN
+	MOVLW .50
+	CPFSLT readL,0
+	RETURN
+	
+	; threshold for centre is 450< centre <550
+	middle
+	CLRF returnFlag
+	
+	RETURN
+
+	
+    MAIN
+	CALL INIT_OSC
+	CALL INIT_PORTS
+	CALL INIT_TMR0
+    ALOOP
+        BSF ADCON0,1,0
+        SMALL_LOOP
+	BTFSC ADCON0,1,0
+	GOTO SMALL_LOOP
+        CALL READ_VALUE
+	CALL CHECK_CENTRE
+	BTFSS returnFlag,0,0
+	CALL CHECK_LEFT
+	BTFSS returnFlag,0,0
+	CALL CHECK_RIGHT
+	
+	MOVFF position, LATC
+	GOTO ALOOP
+END
+    

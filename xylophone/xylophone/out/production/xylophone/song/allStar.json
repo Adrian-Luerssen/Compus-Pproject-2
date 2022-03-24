@@ -1,0 +1,60 @@
+{
+  "name": "AllShit",
+  "notes":
+  [
+    { "key": "C", "delay": 0 },
+    { "key": "G", "delay": 250 },
+    { "key": "E", "delay": 250 },
+    { "key": "E", "delay": 250 },
+    { "key": "D", "delay": 250 },
+    { "key": "C", "delay": 250 },
+
+    { "key": "C", "delay": 400 },
+    { "key": "F", "delay": 250 },
+    { "key": "E", "delay": 250 },
+    { "key": "E", "delay": 250 },
+    { "key": "D", "delay": 250 },
+    { "key": "D", "delay": 250 },
+    { "key": "C", "delay": 250 },
+
+    { "key": "C", "delay": 400 },
+    { "key": "G", "delay": 250 },
+    { "key": "E", "delay": 250 },
+    { "key": "E", "delay": 250 },
+    { "key": "D", "delay": 250 },
+    { "key": "C", "delay": 250 },
+    { "key": "C", "delay": 250 },
+    { "key": "D", "delay": 250 },
+    { "key": "C", "delay": 250 },
+
+    { "key": "C", "delay": 400 },
+    { "key": "C", "delay": 250 },
+    { "key": "G", "delay": 250 },
+    { "key": "E", "delay": 250 },
+    { "key": "E", "delay": 250 },
+    { "key": "D", "delay": 250 },
+    { "key": "D", "delay": 250 },
+    { "key": "C", "delay": 250 },
+    { "key": "C", "delay": 250 },
+    { "key": "F", "delay": 250 },
+
+    { "key": "E", "delay": 400 },
+    { "key": "E", "delay": 250 },
+    { "key": "D", "delay": 250 },
+    { "key": "D", "delay": 250 },
+    { "key": "C", "delay": 250 },
+    { "key": "C", "delay": 250 },
+
+    { "key": "G", "delay": 400 },
+
+    { "key": "E", "delay": 400 },
+    { "key": "E", "delay": 250 },
+    { "key": "D", "delay": 250 },
+
+    { "key": "C", "delay": 400 },
+    { "key": "C", "delay": 250 },
+    { "key": "D", "delay": 250 },
+    { "key": "C", "delay": 250 }
+
+  ]
+}

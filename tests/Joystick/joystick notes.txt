@@ -1,0 +1,28 @@
+we need at least 1 analogue port
+we dont need reference voltages, so ADCON1 is MOVLW b'00001110' <-- only port RA0 is Analogue
+
+		MOVLW b'00000011'
+		MOVWF ADCON0,0
+		MOVLW b'00001110'
+		MOVWF ADCON1,0
+		MOVLW b'10001001'
+		MOVWF ADCON2,0
+
+
+0V is left, 5V is right
+0 is left, 1023 is right --> 511 is the centre
+
+20ms period for PWM
+THigh = Angle
+0.5ms = 0deg
+1.5ms = 90deg
+2.5ms = 180deg
+
+counter to change the position of the servo
+the variable will be the one that dictates the T at high of the PWM
+We may need to use TMRO with interupts to make sure that the PWM is always 20ms long
+
+Button rising edge gives PWM of 0deg button falling edge gives PWM of 180deg
+Down button can be implemented with polling as we only need to check it while we are in the manual mode
+	this also stops the button being used while in different modes such as the UI or automatic mode
+

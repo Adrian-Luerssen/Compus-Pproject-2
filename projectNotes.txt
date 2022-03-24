@@ -1,0 +1,39 @@
+ChangeMode 
+	changes from manual <-> automatic
+	if in manual and we recieve a 'P'
+		switch to automatic mode
+
+Manual Mode
+	record each note that is pressed
+	can only change mode when we are not recording
+	
+	RGB LED green
+	2 different methods to interact
+		using the UI			- ManualModeStatus LED on
+		using joystick and pushbutton	- ManualModeStatus LED off
+	
+	at any moment the user can activate the record submode
+
+	Record submode
+		RGB LED red
+		same way as manual mode (UI or Joystick)
+		all keys pressed and delay between them are stored in the ram
+		each time we record we need to clean the ram before as we do not want to overlap recordings
+		enter and exit mode using recor button
+		if delay between nodes is greater than 1minute, exit submode
+
+
+
+Automatic Mode
+	can only change mode when song has finished playing or song hasnt started playing
+	RGB LED blue
+	'P' signifies the start of a song
+	we send a 'K' bck to signify that we are ready to play the song
+	'S' signifies the end of a song
+	we then wait for the nex 'P' or a change of modes
+	
+
+In either automatic or manual mode
+	only if a song is not being recorded, a song is not being played and there is a recorded song
+	we reproduce the song stored in ram when the user presses the PlayRecording
+	no operations should be taken into account while song is being played
