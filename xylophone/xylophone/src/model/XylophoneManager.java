@@ -16,6 +16,7 @@ public class XylophoneManager
 
     private Synthesizer xylophoneSynth;
     private final Xylophone xylophoneData;
+    private Serial serial;
 
     public XylophoneManager()
     {
@@ -44,7 +45,7 @@ public class XylophoneManager
 
     public void playNote(String noteKey)
     {
-        Serial serial = Serial.getInstance();
+        serial = Serial.getInstance();
         xylophoneSynth.getChannels()[0].noteOn(xylophoneData.getNote(noteKey), 127);
 
         if (serial.isConnected())
@@ -72,7 +73,7 @@ public class XylophoneManager
     public void playSong(String songName) {
         if (songName != null)
         {
-            Serial serial = Serial.getInstance();
+            serial = Serial.getInstance();
             Song song = songDAO.getSong(songName.substring(0, songName.indexOf('.')));
 
             Thread songThread = new Thread(() ->
@@ -128,16 +129,22 @@ public class XylophoneManager
 
     public void runOptional()
     {
-        new Thread(() ->
+        Thread optionalThread = new Thread(() ->
         {
-            Serial serial = Serial.getInstance();
-
+            serial = Serial.getInstance();
+            //System.out.println("here - 1");
             while (true)
             {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException ignore) {
+                }
                 if (serial.isConnected())
                 {
+                    //System.out.println("here - 2");
                     if (serial.receiveNote() == 'P')
                     {
+                        System.out.println("Start Recording");
                         controller.startRecording();
                         receiveSong();
                         controller.endRecording();
@@ -145,6 +152,7 @@ public class XylophoneManager
                 }
             }
         });
+        optionalThread.start();
     }
 
     public void receiveSong()
@@ -155,7 +163,7 @@ public class XylophoneManager
         String songName;
         List<Note> songNotes = new ArrayList<>();
 
-        Serial serial = Serial.getInstance();
+        serial = Serial.getInstance();
 
         /* Send ACK */
         serial.sendCharacter('K');

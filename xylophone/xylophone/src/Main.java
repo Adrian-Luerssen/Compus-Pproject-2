@@ -22,7 +22,7 @@ public class Main
             xylophoneView.setVisible(true);
 
             /* TODO: Uncomment line bellow to implement optional 2 */
-            /* xylophoneManager.runOptional(); */
+            xylophoneManager.runOptional();
         });
     }
 }
