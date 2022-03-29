@@ -13,24 +13,15 @@ LIST P = PIC18F4321 F = INHX32
     ; 0 - joystick flag | 1 - manual mode (1 = java 0 = joy) | 2 - manual hit button pressed | 3 - mode (1 = automatic 0 = manual) |
     ; 4 - record flag (0 = normal | 1 = record) | 5 - 60s reached flag | 6 - save json ok flag (1 = can save 0 = cant save) 
     ; 7 - at end
-    
     timeNoteL EQU 0x05 
     timeNoteH EQU 0x06
     
     savedTimeL EQU 0x07
     savedTimeH EQU 0x08
-    servoFlags EQU 0x09 ; 0 - servo x PWM done | 1 - servo y PWM done | 2 - hit
+ 
   
-    debouce_counterL EQU 0x0A
-    debouce_counterH EQU 0x0B
-    
- 
-    recordTimeL EQU 0x0C
-    recordTimeH EQU 0x0D
-    noteLetter EQU 0x0E
- 
-    pwmTimeH EQU 0x20
-    pwmTimeL EQU 0x21
+    debouce_counter EQU 0x0A
+    noteLetter EQU 0x0B
  
     TABLE7s EQU 0x10
     
@@ -57,103 +48,24 @@ LIST P = PIC18F4321 F = INHX32
     ORG 0x0018
     RETFIE FAST
     
-    
-    TMR0_INTERRUPT
-	BCF INTCON,TMR0IF,0
-	
-	;CLRF TMR0H,0
-	;CLRF TMR0L,0
-	MOVLW LOW(.25536)
-	MOVWF TMR0L,0
-	MOVLW HIGH(.25536)
-	MOVWF TMR0H,0
-	
-	BSF LATC,0,0
-	CALL CHECK_SERVO_X
-	BCF LATC,0,0
-	
-	BSF LATC,1,0
-	CALL CHECK_SERVO_Y
-	BCF LATC,1,0
-	BCF servoFlags,0,0
-	
-	MOVLW .20
-	ADDWF recordTimeL,1,0
-	BTFSC STATUS,DC,0
-	INCF recordTimeH,1,0
-	
-	RETFIE FAST
-
-	
-    CHECK_SERVO_X
-	CALL COUNT_X 
-	CALL COUNT_X
-	CLRF pwmTimeH,0
-	
-	SERVO_LOOP_X
-	;MOVFF pwmTimeH,LATD
-	INCF position,0,0
-	SUBWF pwmTimeH,0 ;1
-	BTFSC STATUS,Z,0 ; 3
-	RETURN ; 2 cycles
-	CALL COUNT_X
-	INCF pwmTimeH,1,0 ; 1 cycle
-	GOTO SERVO_LOOP_X ;2
-	
-	COUNT_X
-	    CLRF pwmTimeL,0
-	    SERVO_X_COUNT_LOOP
-	    MOVLW .50 ; number to count to before 16ms has passed - 1 Cycle
-	    SUBWF pwmTimeL,0 ;1
-	    BTFSC STATUS,Z,0 ; 3
-	    RETURN ; 2 cycles
-	    INCF pwmTimeL,1,0 ; 1 cycle
-	    GOTO SERVO_X_COUNT_LOOP ;2
-	
-    CHECK_SERVO_Y
-	CALL COUNT_Y 
-	CALL COUNT_Y
-	CLRF pwmTimeH,0
-	
-	SERVO_LOOP_Y
-	;MOVFF pwmTimeH,LATD
-	BTFSS servoFlags,0,0
-	MOVLW .1
-	BTFSS servoFlags,0,0
-	MOVLW .8
-	
-	SUBWF pwmTimeH,0 ;1
-	BTFSC STATUS,Z,0 ; 3
-	RETURN ; 2 cycles
-	CALL COUNT_Y
-	INCF pwmTimeH,1,0 ; 1 cycle
-	GOTO SERVO_LOOP_Y ;2
-	
-	COUNT_Y
-	    CLRF pwmTimeL,0
-	    SERVO_Y_COUNT_LOOP
-	    MOVLW .50 ; number to count to before 16ms has passed - 1 Cycle
-	    SUBWF pwmTimeL,0 ;1
-	    BTFSC STATUS,Z,0 ; 3
-	    RETURN ; 2 cycles
-	    INCF pwmTimeL,1,0 ; 1 cycle
-	    GOTO SERVO_Y_COUNT_LOOP ;2
-	
-	RETURN
-	
     DEBOUNCE_LOOP
 	; (1 + (1 + 1 + 3 + 1 + 2 + 8)*a + 2)*Fosc = 16ms
-	CLRF debouce_counterL,0 ; 1 cycle
-	CLRF debouce_counterH,0 ; 1 cycle
+	CLRF debouce_counter,0 ; 1 cycle
+	
 	INNER_BOUNCE_LOOP
-	INCF debouce_counterL,1,0 ; 1 cycle
-	BTFSC STATUS,DC,0	    ; 2 cycles
-	INCF debouce_counterH,1,0    ; 1 cycle
-	MOVLW .199 ; number to count to before 16ms has passed - 1 Cycle
-	SUBWF debouce_counterH,0,0 ; 1 cycle
+	MOVLW .250 ; number to count to before 16ms has passed - 1 Cycle
+	SUBWF debouce_counter,0,0 ; 1 cycle
 	BTFSC STATUS,Z,0 ; 3 cycles
 	RETURN ; 2 cycles
-	
+	INCF debouce_counter,1,0 ; 1 cycle
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
 	GOTO INNER_BOUNCE_LOOP ; 2 cycles
 	
     
@@ -161,25 +73,25 @@ LIST P = PIC18F4321 F = INHX32
 	BCF INTCON3,INT1IF,0
 	CALL DEBOUNCE_LOOP
 	BTFSC PORTB,1,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not return
-	RETURN
+	RETFIE FAST
 	
 	BTFSS flags,3,0
 	BTG flags,1,0
 	;GOTO MANUAL_LOOP
-	RETURN
+	RETFIE FAST
 	
     CHANGE_MODE
 	BCF INTCON3,INT2IF,0
 	CALL DEBOUNCE_LOOP
 	BTFSC PORTB,2,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not return
-	RETURN
+	RETFIE FAST
 	
 	BTFSC flags,4,0
-	RETURN
+	RETFIE FAST
 	
 	BTG flags,3,0
 	;GOTO MANUAL_LOOP
-	RETURN
+	RETFIE FAST
 	
     SET_RECORDING
 		
@@ -256,9 +168,9 @@ LIST P = PIC18F4321 F = INHX32
 	;INCF FSR0L,1
 	
 	
-	
-	CLRF recordTimeH,0
-	CLRF recordTimeL,0
+	CALL INIT_TMR0_REC_IDLE
+	CLRF TMR0H,0
+	CLRF TMR0L,0
 	RETURN
 	
     RECORD_PRESSED
@@ -289,7 +201,7 @@ LIST P = PIC18F4321 F = INHX32
 	BTFSC flags,4,0
 	RETFIE FAST
 	
-	CALL DISABLE_INTERRUPTS_EXCEPT_PWM
+	BCF INTCON, GIE ; disable interrupts
 	
 	MOVLW 0x001
 	MOVWF BSR,0  ; selecting bank 1 of the ram
@@ -313,31 +225,32 @@ LIST P = PIC18F4321 F = INHX32
 	    CPFSLT position,0
 	    GOTO DONE_PLAYING
 	    
-	    CLRF recordTimeL,0
-	    CLRF recordTimeH,0
+	    CLRF TMR0H,0
+	    CLRF TMR0L,0
+	    CALL INIT_TMR0_REC_IDLE
 	    
 	    DELAY_LOOP
 		
-		;MOVFF TMR0H,readH
-		;MOVFF TMR0L,readL
+		MOVFF TMR0H,readH
+		MOVFF TMR0L,readL
 		;MOVFF readH,LATD
 		;MOVFF savedTimeH,LATA
 		
 		
 		MOVF savedTimeH,0,0 ; 11101010
-		CPFSLT recordTimeH,0
+		CPFSLT readH,0
 		GOTO GT_OR_EQ_DELAY
 		GOTO DELAY_LOOP
 
 		GT_OR_EQ_DELAY
 		;BSF LATA,2,0
-		CPFSGT recordTimeH,0
+		CPFSGT readH,0
 		GOTO EQ_DELAY
 		GOTO DONE_DELAY
 
 		EQ_DELAY
 		;BSF LATA,3,0
-		MOVF recordTimeL,0,0 ; 01100000
+		MOVF savedTimeL,0,0 ; 01100000
 		CPFSLT readL,0
 		GOTO DONE_DELAY
 		GOTO DELAY_LOOP
@@ -345,9 +258,10 @@ LIST P = PIC18F4321 F = INHX32
 	    DONE_DELAY
 	    ;MOVFF position, LATA
 	    ;BTG LATD,7,0
+	    CALL INIT_TMR0_PWM
 	    
 	    CALL CONVERT_POS_TIME
-	    
+	    CALL MOVE_SERVO_X
 	    CALL HIT_NOTE
 	    
 	    
@@ -356,33 +270,20 @@ LIST P = PIC18F4321 F = INHX32
 	
 	DONE_PLAYING
 	BCF flags,7,0
-	
-	CALL ENABLE_INTERRUPTS_EXCEPT_PWM ; re-enable interrupts
+	CALL INIT_TMR0_PWM
+	BSF INTCON, GIE ; re-enable interrupts
 	
 	RETFIE FAST
 	
     HIGH_RSI
-	BTFSC INTCON3,INT1IF,0
-	CALL CHANGE_MANUAL_MODE
-	BTFSC INTCON3,INT2IF,0
-	CALL CHANGE_MODE
-	BTFSC INTCON, TMR0IF,0
-	GOTO TMR0_INTERRUPT
 	BTFSC INTCON,INT0IF,0
 	GOTO PLAY_RECORDING
-	
+	BTFSC INTCON3,INT1IF,0
+	GOTO CHANGE_MANUAL_MODE
+	BTFSC INTCON3,INT2IF,0
+	GOTO CHANGE_MODE
 	RETFIE FAST
 	
-    DISABLE_INTERRUPTS_EXCEPT_PWM
-	BCF INTCON, INT0IE,0 ; enable INT0 interrupt
-	BCF INTCON3, INT1IE,0 ; enable INT1 interrupt
-	BCF INTCON3, INT2IE,0 ; enable INT2 interrupt
-	RETURN
-    ENABLE_INTERRUPTS_EXCEPT_PWM
-	BSF INTCON, INT0IE,0 ; enable INT0 interrupt
-	BSF INTCON3, INT1IE,0 ; enable INT1 interrupt
-	BSF INTCON3, INT2IE,0 ; enable INT2 interrupt
-	RETURN
 	
     INIT_INTERRUPTS
 	; Configure RB1 so it generates a High Priority Interrupt 
@@ -394,7 +295,6 @@ LIST P = PIC18F4321 F = INHX32
 	BCF INTCON2,INTEDG2,0 ; falling edge int1
 	
 	BSF INTCON2, TMR0IP,0 ; set TMR0 interrupt as high priority
-	
 	BSF INTCON, INT0IE,0 ; enable INT0 interrupt
 	BSF INTCON3, INT1IE,0 ; enable INT1 interrupt
 	BSF INTCON3, INT2IE,0 ; enable INT2 interrupt
@@ -410,7 +310,7 @@ LIST P = PIC18F4321 F = INHX32
 	MOVWF RCSTA,0
 	MOVLW b'01001000' ; BRG16 - 1
 	MOVWF BAUDCON,0
-	MOVLW .207       ; baud rate of 9600
+	MOVLW .25       ; baud rate of 9600
 	MOVWF SPBRG,0
 	;MOVLW b'00000000'
 	;MOVWF SPBRGH,0
@@ -418,13 +318,20 @@ LIST P = PIC18F4321 F = INHX32
 	RETURN
     
     INIT_OSC
-	MOVLW b'01110010'    ; 1MHz 1us
+	MOVLW b'01000010'    ; 1MHz 1us
 	MOVWF   OSCCON,0 
+	RETURN
+	
+    INIT_TMR0_PWM
+	
 	MOVLW b'10011000' ; 16 bit timer - no prescaler 
 	MOVWF T0CON,0
 	RETURN
+    INIT_TMR0_REC_IDLE
 	
-    
+	MOVLW b'10010111' ; 16 bit timer - 8 bit prescaler - counts to 65563ms 
+	MOVWF T0CON,0
+	RETURN
     INIT_PORTS
 	MOVLW b'00000011'
 	MOVWF ADCON0,0
@@ -456,6 +363,94 @@ LIST P = PIC18F4321 F = INHX32
 	MOVFF TABLAT,LATD
 	RETURN
 	
+    High_PWM
+	;MOVFF TMR0L,LATD
+	MOVFF TMR0L,readL
+	MOVFF TMR0H,readH
+	MOVFF timeNoteH, WREG
+	CPFSEQ readH,0
+	GOTO High_PWM
+	MOVFF timeNoteL, WREG
+	CPFSGT readL,0
+	GOTO High_PWM
+	RETURN
+	
+    MOVE_SERVO_X
+	BCF INTCON, GIE ;disable interrupts
+	BTFSS flags,4,0
+	GOTO START_PWM_X
+	MOVFF TMR0H, savedTimeH
+	MOVFF TMR0L, savedTimeL
+	;MOVFF savedTimeH,LATD
+	;MOVFF savedTimeL,LATA
+	
+	START_PWM_X
+	CLRF TMR0H,0
+	CLRF TMR0L,0
+	BSF LATC,0,0
+	CALL High_PWM
+	
+	TIME_AT_LOW_X
+	BCF LATC,0,0
+	MOVFF TMR0L,readL
+	MOVFF TMR0H,readH
+	MOVLW HIGH(.5000)
+	CPFSGT readH,0
+	GOTO TIME_AT_LOW_X
+	MOVLW LOW(.5000)
+	CPFSGT readL,0
+	GOTO TIME_AT_LOW_X
+	
+	
+	BTFSS flags,3,0 ; re-enable interrupts only when we are not playing a song through the automatic mode
+	BSF INTCON, GIE ; re-enable interrupts
+	
+	BTFSS flags,4,0
+	RETURN
+	CALL INIT_TMR0_REC_IDLE
+	CLRF TMR0L,0
+	CLRF TMR0H,0
+	MOVF savedTimeL,0,0
+	MOVWF TMR0L,0
+	MOVLW .20
+	ADDWF TMR0L,1,0	
+	
+	MOVF savedTimeH,0,0
+	MOVWF TMR0H,0
+	
+	
+	RETURN
+	
+    MOVE_SERVO_Y
+	BCF INTCON, GIE ;disable interrupts
+	
+	CLRF TMR0H,0
+	CLRF TMR0L,0
+	BSF LATC,1,0
+	TIME_AT_HIGH_Y
+	MOVFF TMR0L,readL
+	MOVFF TMR0H,readH
+	MOVFF timeNoteH, WREG
+	CPFSEQ readH,0
+	GOTO TIME_AT_HIGH_Y
+	MOVFF timeNoteL, WREG
+	CPFSGT readL,0
+	GOTO TIME_AT_HIGH_Y
+	
+	TIME_AT_LOW_Y
+	BCF LATC,1,0
+	MOVFF TMR0L,readL
+	MOVFF TMR0H,readH
+	MOVLW HIGH(.5000)
+	CPFSGT readH,0
+	GOTO TIME_AT_LOW_Y
+	MOVLW LOW(.5000)
+	CPFSGT readL,0
+	GOTO TIME_AT_LOW_Y
+	
+	BTFSS flags,3,0 ; re-enable interrupts only when we are not playing a song through the automatic mode
+	BSF INTCON, GIE ; re-enable interrupts
+	RETURN
 	
     CHECK_LEFT
 	
@@ -478,6 +473,7 @@ LIST P = PIC18F4321 F = INHX32
 	CLRF timeNoteL,0
 	CLRF timeNoteH,0
 	CALL CONVERT_POS_TIME
+	CALL MOVE_SERVO_X
 	
 	RETURN
 	
@@ -501,6 +497,7 @@ LIST P = PIC18F4321 F = INHX32
 	CLRF timeNoteL,0
 	CLRF timeNoteH,0
 	CALL CONVERT_POS_TIME
+	CALL MOVE_SERVO_X
 	
 	RETURN
 	
@@ -531,16 +528,17 @@ LIST P = PIC18F4321 F = INHX32
 	
     CHECK_REC_TIME
 	;checking if > 60000
-		
+	MOVFF TMR0H,readH
+	MOVFF TMR0L,readL
 	;MOVFF readH,LATA
 	MOVLW HIGH(.60000) ; 11101010
-	CPFSLT recordTimeH,0
+	CPFSLT readH,0
 	GOTO GT_OR_EQ_60
 	RETURN
 	
 	GT_OR_EQ_60
 	;BSF LATA,2,0
-	CPFSGT recordTimeH,0
+	CPFSGT readH,0
 	GOTO EQ_60
 	BSF flags,5,0
 	RETURN
@@ -548,7 +546,7 @@ LIST P = PIC18F4321 F = INHX32
 	EQ_60
 	;BSF LATA,3,0
 	MOVLW LOW(.60000)  ; 01100000
-	CPFSLT recordTimeL,0
+	CPFSLT readL,0
 	BSF flags,5,0
 	;BSF LATA,4,0
 	RETURN
@@ -556,11 +554,13 @@ LIST P = PIC18F4321 F = INHX32
     MAIN
 	CALL INIT_OSC
 	CALL INIT_PORTS
-	CALL CONVERT_POS_TIME
+	CALL INIT_TMR0_PWM
 	CALL INIT_INTERRUPTS
 	CALL INIT_EUSART
-	BSF INTCON, TMR0IE,0
 	
+	
+
+	GOTO MAIN_LOOP
 	
     MAIN_LOOP
     
@@ -574,7 +574,7 @@ LIST P = PIC18F4321 F = INHX32
 	
     
     AUTOMATIC_LOOP
-	CALL ENABLE_INTERRUPTS_EXCEPT_PWM ; re-enable interrupts
+	BSF INTCON, GIE ; re-enable interrupts
 	
 	; setting the color of the RGB LED
 	BCF LATC,3,0 
@@ -582,8 +582,6 @@ LIST P = PIC18F4321 F = INHX32
 	BSF LATC,4,0
 	
 	WAIT_RX_AUTO
-	    ;CALL CHECK_SERVOS
-	    
 	    BTFSC flags,7,0
 	    CALL MAIN_LOOP
 	    BTFSS flags,3,0
@@ -600,7 +598,7 @@ LIST P = PIC18F4321 F = INHX32
 	BTFSS STATUS,Z,0
 	GOTO AUTOMATIC_LOOP
 	
-	CALL DISABLE_INTERRUPTS_EXCEPT_PWM ;disable interrupts
+	BCF INTCON, GIE ;disable interrupts
 	
 	MOVLW 'K'
 	MOVWF TXREG,0
@@ -611,7 +609,6 @@ LIST P = PIC18F4321 F = INHX32
 	
 	
 	WAIT_RX_AUTO_PLAY
-	    ;CALL CHECK_SERVOS
 	    BTFSS PIR1, RCIF, 0
 	    GOTO WAIT_RX_AUTO_PLAY
 	
@@ -630,6 +627,7 @@ LIST P = PIC18F4321 F = INHX32
 	CLRF timeNoteH,0
 	CALL CONVERT_Letter_Pos
 	
+	CALL MOVE_SERVO_X
 	
 	CALL HIT_NOTE
 	GOTO WAIT_RX_AUTO_PLAY
@@ -639,13 +637,6 @@ LIST P = PIC18F4321 F = INHX32
     MANUAL_LOOP
 	; setting the color of the RGB LED
 	CALL RECORD_PRESSED
-	
-	;CALL CHECK_SERVOS
-	
-	BTFSC flags,4,0
-	CALL CHECK_REC_TIME
-	BTFSC flags,5,0 ; checks if 60 seconds have passed since the recording started
-	CALL REC_OVER
 	
 	BTFSC flags,4,0
 	GOTO REC_LEDS
@@ -671,12 +662,17 @@ LIST P = PIC18F4321 F = INHX32
 	BCF LATC,5,0
 	
 	
+	BTFSC flags,4,0
+	CALL CHECK_REC_TIME
+	BTFSC flags,5,0 ; checks if 60 seconds have passed since the recording started
+	CALL REC_OVER
+	
 	BTFSC PORTB,3,0
 	GOTO HIT_NOT_PRESSED
 	
 	CALL DEBOUNCE_LOOP
 	BTFSC PORTB,3,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not return
-	GOTO HIT_NOT_PRESSED ; if not we havent been pressed
+	GOTO HIT_NOT_PRESSED
 	
 	BTFSC flags,2,0
 	GOTO NO_HIT
@@ -711,6 +707,11 @@ LIST P = PIC18F4321 F = INHX32
      MANUAL_JAVA
 	BSF LATC,5,0
 	WAIT_RX
+	    BTFSC flags,4,0
+	    SETF LATD,0
+	    
+	    BTFSS flags,4,0
+	    CLRF LATD,0
 	    
 	    CALL RECORD_PRESSED
 	    
@@ -724,7 +725,6 @@ LIST P = PIC18F4321 F = INHX32
 	    
 	    BTFSS flags,1,0 ; checks if manual mode has changed to joystick
 	    GOTO MANUAL_LOOP
-	    
 	    BTFSS PIR1, RCIF, 0
 	    GOTO WAIT_RX
 	
@@ -735,12 +735,17 @@ LIST P = PIC18F4321 F = INHX32
 	BTFSC RCSTA,OERR,0 
 	CALL OVERRUN
 	
-	MOVFF readL,LATA
+	
 	;CLRF timeNoteL,0
 	;CLRF timeNoteH,0
 	CALL CONVERT_Letter_Pos
+	CLRF timeNoteL,0
+	CLRF timeNoteH,0
 	CALL CONVERT_POS_TIME
 	
+	
+	;MOVFF TMR0L,LATD
+	CALL MOVE_SERVO_X
 	
 	
 	CALL HIT_NOTE
@@ -757,18 +762,33 @@ LIST P = PIC18F4321 F = INHX32
 	CALL DISPLAY_NOTE
 	BTFSC flags,4,0
 	CALL SAVE_NOTE
-	;BTFSC flags,4,0
+	BTFSC flags,4,0
+	CALL INIT_TMR0_PWM
 	
+	BCF INTCON, GIE ;disable interrupts
 	
+	;lower hit arm
+	MOVLW HIGH(.475)
+	MOVWF timeNoteH,0
+	MOVLW LOW(.475)
+	MOVWF timeNoteL,0
 	
-	BSF servoFlags,2,0
+	CALL MOVE_SERVO_Y
+	
+	;raise hit arm
+	MOVLW HIGH(.125)
+	MOVWF timeNoteH,0
+	MOVLW LOW(.125)
+	MOVWF timeNoteL,0
+	
+	CALL MOVE_SERVO_Y
 	
 	BTFSC flags,4,0
+	CALL INIT_TMR0_REC_IDLE
+	CLRF TMR0H,0
+	CLRF TMR0L,0
 	
-	CLRF recordTimeL,0
-	CLRF recordTimeH,0
-	
-	
+	BSF INTCON, GIE ; re-enable interrupts
 	RETURN
 	
     REC_OVER
@@ -793,6 +813,7 @@ LIST P = PIC18F4321 F = INHX32
 	LFSR 0, Position_RAM_Notes
 	LFSR 1, Position_RAM_Delay_L
 	LFSR 2, Position_RAM_Delay_H
+	CALL INIT_TMR0_PWM
 	
 	
     SEND_STOP_JAVA
@@ -807,60 +828,52 @@ LIST P = PIC18F4321 F = INHX32
 	
     SAVE_NOTE
 	
-	CALL DISABLE_INTERRUPTS_EXCEPT_PWM ; disable interrupts
+	BCF INTCON, GIE ; disable interrupts
 	;MOVLW 0x001
 	;MOVWF BSR,0  ; selecting bank 1 of the ram
+	MOVFF TMR0H, readH
+	MOVFF TMR0L, readL
+	
 	
 	MOVFF position,INDF0
 	
 	
-	MOVFF recordTimeL,INDF1
+	MOVFF readL,INDF1
 	
 	
-	MOVFF recordTimeH,INDF2
+	MOVFF readH,INDF2
 	
 	
 	INCF FSR0L,1
 	INCF FSR1L,1
 	INCF FSR2L,1
 	
-	BTFSC flags,4,0
+	BTFSC flags,6,0
 	CALL SEND_NOTE    
 	    
-	CLRF recordTimeH,0
-	CLRF recordTimeL,0
-	CALL ENABLE_INTERRUPTS_EXCEPT_PWM ; re-enable interrupts
+	CLRF TMR0H,0
+	CLRF TMR0L,0
+	BSF INTCON, GIE ; re-enable interrupts
 	RETURN
 	
     SEND_NOTE
-	BTG LATD,7,0
 	CALL CONVERT_POS_TIME
-	MOVFF noteLetter,LATA
+	;MOVFF noteLetter,LATA
 	MOVFF noteLetter,TXREG
-	
-	BCF INTCON, TMR0IE,0
 	WAIT_TRANS_NOTE_LETTER
-	    
 	    BTFSS TXSTA, 1, 0
 	    GOTO WAIT_TRANS_NOTE_LETTER
+	    
 	
-	BSF INTCON, TMR0IE,0    
-	
-	;MOVFF recordTimeL,LATA
-	MOVFF recordTimeL, TXREG
-	BCF INTCON, TMR0IE,0
+	MOVFF readL, TXREG
 	WAIT_TRANS_DELAY_L
 	    BTFSS TXSTA, 1, 0
 	    GOTO WAIT_TRANS_DELAY_L
-	BSF INTCON, TMR0IE,0   
-	
-	;MOVFF recordTimeH,LATA    
-	MOVFF recordTimeH, TXREG
-	BCF INTCON, TMR0IE,0
+	    
+	MOVFF readH, TXREG
 	WAIT_TRANS_DELAY_H
 	    BTFSS TXSTA, 1, 0
 	    GOTO WAIT_TRANS_DELAY_H
-	BSF INTCON, TMR0IE,0     
 	RETURN
 	
     CONVERT_POS_TIME
@@ -952,6 +965,10 @@ LIST P = PIC18F4321 F = INHX32
 	MOVWF noteLetter,0
 	MOVLW .0
 	MOVWF position,0
+	MOVLW HIGH(.125)
+	MOVWF timeNoteH,0
+	MOVLW LOW(.125)
+	MOVWF timeNoteL,0
 	RETURN
 	
     SET_NOTE_D
@@ -959,12 +976,20 @@ LIST P = PIC18F4321 F = INHX32
 	MOVWF noteLetter,0
 	MOVLW .1
 	MOVWF position,0
+	MOVLW HIGH(.175)
+	MOVWF timeNoteH,0
+	MOVLW LOW(.175)
+	MOVWF timeNoteL,0
 	RETURN
     SET_NOTE_E
 	MOVLW 'E'
 	MOVWF noteLetter,0
 	MOVLW .2
 	MOVWF position,0
+	MOVLW HIGH(.225)
+	MOVWF timeNoteH,0
+	MOVLW LOW(.225)
+	MOVWF timeNoteL,0
 	RETURN
 	
     SET_NOTE_F
@@ -972,24 +997,40 @@ LIST P = PIC18F4321 F = INHX32
 	MOVWF noteLetter,0
 	MOVLW .3
 	MOVWF position,0
+	MOVLW HIGH(.275)
+	MOVWF timeNoteH,0
+	MOVLW LOW(.275)
+	MOVWF timeNoteL,0
 	RETURN
     SET_NOTE_G
 	MOVLW 'G'
 	MOVWF noteLetter,0
 	MOVLW .4
 	MOVWF position,0
+	MOVLW HIGH(.325)
+	MOVWF timeNoteH,0
+	MOVLW LOW(.325)
+	MOVWF timeNoteL,0
 	RETURN
     SET_NOTE_A
 	MOVLW 'A'
 	MOVWF noteLetter,0
 	MOVLW .5
 	MOVWF position,0
+	MOVLW HIGH(.375)
+	MOVWF timeNoteH,0
+	MOVLW LOW(.375)
+	MOVWF timeNoteL,0
 	RETURN
     SET_NOTE_B
 	MOVLW 'B'
 	MOVWF noteLetter,0
 	MOVLW .6
 	MOVWF position,0
+	MOVLW HIGH(.425)
+	MOVWF timeNoteH,0
+	MOVLW LOW(.425)
+	MOVWF timeNoteL,0
 	RETURN
 	
     SET_NOTE_C2
@@ -997,6 +1038,10 @@ LIST P = PIC18F4321 F = INHX32
 	MOVWF noteLetter,0
 	MOVLW .7
 	MOVWF position,0
+	MOVLW HIGH(.475)
+	MOVWF timeNoteH,0
+	MOVLW LOW(.475)
+	MOVWF timeNoteL,0
 	RETURN
     
 END
