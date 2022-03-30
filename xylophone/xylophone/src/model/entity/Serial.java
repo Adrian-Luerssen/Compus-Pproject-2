@@ -17,7 +17,7 @@ public class Serial
 
     private SerialPort[] availablePorts;
     private SerialPort selectedPort;
-    private boolean isConnected;
+    private volatile boolean isConnected;
 
     private Serial()
     {

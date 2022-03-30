@@ -129,16 +129,14 @@ public class XylophoneManager
 
     public void runOptional()
     {
-        Thread optionalThread = new Thread(() ->
+        new Thread(() ->
         {
-            serial = Serial.getInstance();
+            Serial serial = Serial.getInstance();
+
             //System.out.println("here - 1");
             while (true)
             {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException ignore) {
-                }
+
                 if (serial.isConnected())
                 {
                     //System.out.println("here - 2");
@@ -151,8 +149,7 @@ public class XylophoneManager
                     }
                 }
             }
-        });
-        optionalThread.start();
+        }).start();
     }
 
     public void receiveSong()

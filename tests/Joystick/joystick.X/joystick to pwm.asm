@@ -60,7 +60,7 @@ LIST P = PIC18F4321 F = INHX32
     
     TMR0_INTERRUPT
 	BCF INTCON,TMR0IF,0
-	
+	BTG LATD,7,0
 	;CLRF TMR0H,0
 	;CLRF TMR0L,0
 	MOVLW LOW(.25536)
@@ -103,7 +103,7 @@ LIST P = PIC18F4321 F = INHX32
 	COUNT_X
 	    CLRF pwmTimeL,0
 	    SERVO_X_COUNT_LOOP
-	    MOVLW .50 ; number to count to before 16ms has passed - 1 Cycle
+	    MOVLW .50 ; 1 Cycle
 	    SUBWF pwmTimeL,0 ;1
 	    BTFSC STATUS,Z,0 ; 3
 	    RETURN ; 2 cycles
@@ -117,7 +117,7 @@ LIST P = PIC18F4321 F = INHX32
 	
 	SERVO_LOOP_Y
 	;MOVFF pwmTimeH,LATD
-	BTFSS servoFlags,0,0
+	BTFSC servoFlags,0,0
 	MOVLW .1
 	BTFSS servoFlags,0,0
 	MOVLW .8
@@ -163,8 +163,12 @@ LIST P = PIC18F4321 F = INHX32
 	BTFSC PORTB,1,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not return
 	RETURN
 	
+	BTFSC flags,7,0
+	RETFIE FAST
+	
 	BTFSS flags,3,0
 	BTG flags,1,0
+	
 	;GOTO MANUAL_LOOP
 	RETURN
 	
@@ -175,6 +179,9 @@ LIST P = PIC18F4321 F = INHX32
 	RETURN
 	
 	BTFSC flags,4,0
+	RETURN
+	
+	BTFSC flags,7,0
 	RETURN
 	
 	BTG flags,3,0
@@ -223,9 +230,10 @@ LIST P = PIC18F4321 F = INHX32
 	    GOTO WAIT_TRANS_START_REC
 	
 	    
-	CALL DEBOUNCE_LOOP
-	BTFSS PIR1, RCIF, 0
-	RETURN
+	WAIT_RX_START_REC
+	    ;CALL CHECK_SERVOS
+	    BTFSS PIR1, RCIF, 0
+	    GOTO WAIT_RX_START_REC
 	    
 	
 	MOVLW 'K'
@@ -234,7 +242,7 @@ LIST P = PIC18F4321 F = INHX32
 	BSF flags,6,0
 	
 	;BTFSC flags,6,0
-	;BSF LATD,7,0
+	;SETF LATA,0
 	
 	BTFSC RCSTA,OERR,0 
 	CALL OVERRUN
@@ -268,6 +276,8 @@ LIST P = PIC18F4321 F = INHX32
 	BTFSS PORTB,4,0
 	RETURN
 	
+	BTFSC flags,7,0
+	RETURN
 	
 	CALL SET_RECORDING
 	
@@ -279,17 +289,20 @@ LIST P = PIC18F4321 F = INHX32
 	;MOVFF flags,PORTA
 	GOTO MAIN_LOOP
 	
-    
-    PLAY_RECORDING
+    PLAY_BUTTON_INTERRUPT
 	BCF INTCON,INT0IF,0
 	CALL DEBOUNCE_LOOP
 	BTFSC PORTB,0,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not return
-	RETFIE FAST
+	RETURN
 	
 	BTFSC flags,4,0
-	RETFIE FAST
+	RETURN
 	
-	CALL DISABLE_INTERRUPTS_EXCEPT_PWM
+	BSF flags,7,0
+	RETURN
+	
+    PLAY_RECORDING 
+	;CALL DISABLE_INTERRUPTS_EXCEPT_PWM
 	
 	MOVLW 0x001
 	MOVWF BSR,0  ; selecting bank 1 of the ram
@@ -300,44 +313,48 @@ LIST P = PIC18F4321 F = INHX32
 	LFSR 2, Position_RAM_Delay_H
 	
 	PLAY_LOOP
-	    MOVFF INDF0, position
+	    MOVFF INDF0, readL
 	    MOVFF INDF1, savedTimeL
 	    MOVFF INDF2,savedTimeH
-	    
+	    ;MOVFF savedTimeL,LATA
+	    ;MOVFF savedTimeH,LATD
 	    
 	    INCF FSR0L,1
 	    INCF FSR1L,1
 	    INCF FSR2L,1
 	    
 	    MOVLW .8
-	    CPFSLT position,0
+	    CPFSLT readL,0
 	    GOTO DONE_PLAYING
+	    
+	    MOVFF readL,position
+	    CALL CONVERT_POS_TIME
 	    
 	    CLRF recordTimeL,0
 	    CLRF recordTimeH,0
 	    
 	    DELAY_LOOP
 		
-		;MOVFF TMR0H,readH
-		;MOVFF TMR0L,readL
+		MOVFF recordTimeH,readH
+		MOVFF recordTimeL,readL
 		;MOVFF readH,LATD
 		;MOVFF savedTimeH,LATA
 		
 		
 		MOVF savedTimeH,0,0 ; 11101010
-		CPFSLT recordTimeH,0
+		CPFSLT readH,0
 		GOTO GT_OR_EQ_DELAY
 		GOTO DELAY_LOOP
 
 		GT_OR_EQ_DELAY
 		;BSF LATA,2,0
-		CPFSGT recordTimeH,0
+		CPFSGT readH,0
 		GOTO EQ_DELAY
 		GOTO DONE_DELAY
 
 		EQ_DELAY
 		;BSF LATA,3,0
-		MOVF recordTimeL,0,0 ; 01100000
+		MOVF savedTimeL,0,0 ; 01100000
 		CPFSLT readL,0
 		GOTO DONE_DELAY
 		GOTO DELAY_LOOP
@@ -346,7 +363,7 @@ LIST P = PIC18F4321 F = INHX32
 	    ;MOVFF position, LATA
 	    ;BTG LATD,7,0
 	    
-	    CALL CONVERT_POS_TIME
+	    
 	    
 	    CALL HIT_NOTE
 	    
@@ -359,17 +376,18 @@ LIST P = PIC18F4321 F = INHX32
 	
 	CALL ENABLE_INTERRUPTS_EXCEPT_PWM ; re-enable interrupts
 	
-	RETFIE FAST
+	RETURN
 	
     HIGH_RSI
 	BTFSC INTCON3,INT1IF,0
 	CALL CHANGE_MANUAL_MODE
 	BTFSC INTCON3,INT2IF,0
 	CALL CHANGE_MODE
+	BTFSC INTCON,INT0IF,0
+	CALL PLAY_BUTTON_INTERRUPT
 	BTFSC INTCON, TMR0IF,0
 	GOTO TMR0_INTERRUPT
-	BTFSC INTCON,INT0IF,0
-	GOTO PLAY_RECORDING
+	
 	
 	RETFIE FAST
 	
@@ -560,9 +578,13 @@ LIST P = PIC18F4321 F = INHX32
 	CALL INIT_INTERRUPTS
 	CALL INIT_EUSART
 	BSF INTCON, TMR0IE,0
-	
+	CALL DISPLAY_NOTE
+	GOTO MAIN_LOOP
 	
     MAIN_LOOP
+	
+	BTFSC flags,7,0
+	CALL PLAY_RECORDING
     
 	BTFSS flags,3,0
 	CALL MANUAL_LOOP
@@ -714,6 +736,9 @@ LIST P = PIC18F4321 F = INHX32
 	    
 	    CALL RECORD_PRESSED
 	    
+	    BTFSC flags,7,0
+	    CALL MAIN_LOOP
+	    
 	    BTFSC flags,4,0 ;
 	    CALL CHECK_REC_TIME
 	    BTFSC flags,5,0 ; checks if 60 seconds have passed since the recording started
@@ -761,7 +786,7 @@ LIST P = PIC18F4321 F = INHX32
 	
 	
 	
-	BSF servoFlags,2,0
+	BSF servoFlags,0,0
 	
 	BTFSC flags,4,0
 	
@@ -777,9 +802,8 @@ LIST P = PIC18F4321 F = INHX32
 	CALL SEND_STOP_JAVA
 	BCF flags,6,0
 	
-	MOVLW b'00001000'
-	MOVWF position,0
-	CALL SAVE_NOTE
+	MOVLW b'10000000'
+	MOVWF INDF0,0
 	
 	
 	BCF flags,4,0
@@ -824,7 +848,7 @@ LIST P = PIC18F4321 F = INHX32
 	INCF FSR1L,1
 	INCF FSR2L,1
 	
-	BTFSC flags,4,0
+	BTFSC flags,6,0
 	CALL SEND_NOTE    
 	    
 	CLRF recordTimeH,0
@@ -833,7 +857,7 @@ LIST P = PIC18F4321 F = INHX32
 	RETURN
 	
     SEND_NOTE
-	BTG LATD,7,0
+	;BTG LATD,7,0
 	CALL CONVERT_POS_TIME
 	MOVFF noteLetter,LATA
 	MOVFF noteLetter,TXREG
