@@ -31,6 +31,7 @@ LIST P = PIC18F4321 F = INHX32
  
     pwmTimeH EQU 0x20
     pwmTimeL EQU 0x21
+    Hit_Counter EQU 0x22
  
     TABLE7s EQU 0x10
     
@@ -75,7 +76,7 @@ LIST P = PIC18F4321 F = INHX32
 	BSF LATC,1,0
 	CALL CHECK_SERVO_Y
 	BCF LATC,1,0
-	BCF servoFlags,0,0
+	
 	
 	MOVLW .20
 	ADDWF recordTimeL,1,0
@@ -117,14 +118,14 @@ LIST P = PIC18F4321 F = INHX32
 	
 	SERVO_LOOP_Y
 	;MOVFF pwmTimeH,LATD
-	BTFSC servoFlags,0,0
-	MOVLW .1
 	BTFSS servoFlags,0,0
+	MOVLW .1
+	BTFSC servoFlags,0,0
 	MOVLW .8
 	
 	SUBWF pwmTimeH,0 ;1
 	BTFSC STATUS,Z,0 ; 3
-	RETURN ; 2 cycles
+	GOTO END_SERVO_Y ; 2 cycles
 	CALL COUNT_Y
 	INCF pwmTimeH,1,0 ; 1 cycle
 	GOTO SERVO_LOOP_Y ;2
@@ -138,7 +139,21 @@ LIST P = PIC18F4321 F = INHX32
 	    RETURN ; 2 cycles
 	    INCF pwmTimeL,1,0 ; 1 cycle
 	    GOTO SERVO_Y_COUNT_LOOP ;2
+	END_SERVO_Y
 	
+	BTFSS servoFlags,0,0
+	RETURN
+	
+	MOVLW .20
+	SUBWF Hit_Counter,0,0
+	BTFSS STATUS,Z,0
+	GOTO STILL_HITTING
+	BCF servoFlags,0,0
+	CLRF Hit_Counter,0
+	RETURN
+	
+	STILL_HITTING
+	INCF Hit_Counter,1,0
 	RETURN
 	
     DEBOUNCE_LOOP

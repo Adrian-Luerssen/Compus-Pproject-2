@@ -1,4 +1,4 @@
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE  1
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -57,7 +57,7 @@ Warning[207]: Found label after column 1. (debouce_counterH)
                       00026     
                       00027  
 Warning[207]: Found label after column 1. (recordTimeL)
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE  2
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -73,1212 +73,1230 @@ Warning[207]: Found label after column 1. (pwmTimeH)
   00000020            00032     pwmTimeH EQU 0x20
 Warning[207]: Found label after column 1. (pwmTimeL)
   00000021            00033     pwmTimeL EQU 0x21
-                      00034  
+Warning[207]: Found label after column 1. (Hit_Counter)
+  00000022            00034     Hit_Counter EQU 0x22
+                      00035  
 Warning[207]: Found label after column 1. (TABLE7s)
-  00000010            00035     TABLE7s EQU 0x10
-                      00036     
+  00000010            00036     TABLE7s EQU 0x10
+                      00037     
 Warning[207]: Found label after column 1. (Position_RAM_Notes)
-  00000040            00037     Position_RAM_Notes EQU 0x40     ; FSR0
+  00000040            00038     Position_RAM_Notes EQU 0x40     ; FSR0
 Warning[207]: Found label after column 1. (Position_RAM_Delay_L)
-  00000080            00038     Position_RAM_Delay_L EQU 0x80   ; FSR1
+  00000080            00039     Position_RAM_Delay_L EQU 0x80   ; FSR1
 Warning[207]: Found label after column 1. (Position_RAM_Delay_H)
-  000000C0            00039     Position_RAM_Delay_H EQU 0xC0   ; FSR2
-                      00040     
-                      00041     ORG TABLE7s
-                      00042     ; C, D - 0x10, 0x11
-000010 5E39           00043     DB b'00111001', b'01011110'
-                      00044     ; E, F - 0x12, 0x13
-000012 7179           00045     DB b'01111001', b'01110001'
-                      00046     ; G, A - 0x14, 0x15
-000014 776F           00047     DB b'01101111', b'01110111'
-                      00048     ; B, c - 0x16, 0x17
-000016 587C           00049     DB b'01111100', b'01011000'
-                      00050     
+  000000C0            00040     Position_RAM_Delay_H EQU 0xC0   ; FSR2
+                      00041     
+                      00042     ORG TABLE7s
+                      00043     ; C, D - 0x10, 0x11
+000010 5E39           00044     DB b'00111001', b'01011110'
+                      00045     ; E, F - 0x12, 0x13
+000012 7179           00046     DB b'01111001', b'01110001'
+                      00047     ; G, A - 0x14, 0x15
+000014 776F           00048     DB b'01101111', b'01110111'
+                      00049     ; B, c - 0x16, 0x17
+000016 587C           00050     DB b'01111100', b'01011000'
                       00051     
                       00052     
-                      00053     ORG 0x0000
-000000 EF?? F???      00054     GOTO MAIN
-                      00055     ORG 0x0008
-000008 EF?? F???      00056     GOTO HIGH_RSI
-                      00057     ORG 0x0018
-000018 0011           00058     RETFIE FAST
-                      00059     
+                      00053     
+                      00054     ORG 0x0000
+000000 EF?? F???      00055     GOTO MAIN
+                      00056     ORG 0x0008
+000008 EF?? F???      00057     GOTO HIGH_RSI
+                      00058     ORG 0x0018
+000018 0011           00059     RETFIE FAST
                       00060     
+                      00061     
 Warning[207]: Found label after column 1. (TMR0_INTERRUPT)
-00001A                00061     TMR0_INTERRUPT
-00001A 94F2           00062         BCF INTCON,TMR0IF,0
-00001C 7E8C           00063         BTG LATD,7,0
-                      00064         ;CLRF TMR0H,0
-                      00065         ;CLRF TMR0L,0
-00001E 0EC0           00066         MOVLW LOW(.25536)
-000020 6ED6           00067         MOVWF TMR0L,0
-000022 0E63           00068         MOVLW HIGH(.25536)
-000024 6ED7           00069         MOVWF TMR0H,0
-                      00070         
-000026 808B           00071         BSF LATC,0,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE  3
+00001A                00062     TMR0_INTERRUPT
+00001A 94F2           00063         BCF INTCON,TMR0IF,0
+00001C 7E8C           00064         BTG LATD,7,0
+                      00065         ;CLRF TMR0H,0
+                      00066         ;CLRF TMR0L,0
+00001E 0EC0           00067         MOVLW LOW(.25536)
+000020 6ED6           00068         MOVWF TMR0L,0
+000022 0E63           00069         MOVLW HIGH(.25536)
+000024 6ED7           00070         MOVWF TMR0H,0
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE  3
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-000028 EC?? F???      00072         CALL CHECK_SERVO_X
-00002C 908B           00073         BCF LATC,0,0
-                      00074         
-00002E 828B           00075         BSF LATC,1,0
-000030 EC?? F???      00076         CALL CHECK_SERVO_Y
-000034 928B           00077         BCF LATC,1,0
-000036 9009           00078         BCF servoFlags,0,0
+                      00071         
+000026 808B           00072         BSF LATC,0,0
+000028 EC?? F???      00073         CALL CHECK_SERVO_X
+00002C 908B           00074         BCF LATC,0,0
+                      00075         
+00002E 828B           00076         BSF LATC,1,0
+000030 EC?? F???      00077         CALL CHECK_SERVO_Y
+000034 928B           00078         BCF LATC,1,0
                       00079         
-000038 0E14           00080         MOVLW .20
-00003A 260C           00081         ADDWF recordTimeL,1,0
-00003C B2D8           00082         BTFSC STATUS,DC,0
-00003E 2A0D           00083         INCF recordTimeH,1,0
-                      00084         
-000040 0011           00085         RETFIE FAST
-                      00086 
-                      00087         
+                      00080         
+000036 0E14           00081         MOVLW .20
+000038 260C           00082         ADDWF recordTimeL,1,0
+00003A B2D8           00083         BTFSC STATUS,DC,0
+00003C 2A0D           00084         INCF recordTimeH,1,0
+                      00085         
+00003E 0011           00086         RETFIE FAST
+                      00087 
+                      00088         
 Warning[207]: Found label after column 1. (CHECK_SERVO_X)
-000042                00088     CHECK_SERVO_X
-000042 EC?? F???      00089         CALL COUNT_X 
-000046 EC?? F???      00090         CALL COUNT_X
-00004A 6A20           00091         CLRF pwmTimeH,0
-                      00092         
+000040                00089     CHECK_SERVO_X
+000040 EC?? F???      00090         CALL COUNT_X 
+000044 EC?? F???      00091         CALL COUNT_X
+000048 6A20           00092         CLRF pwmTimeH,0
+                      00093         
 Warning[207]: Found label after column 1. (SERVO_LOOP_X)
-00004C                00093         SERVO_LOOP_X
-                      00094         ;MOVFF pwmTimeH,LATD
-00004C 2803           00095         INCF position,0,0
-00004E 5C20           00096         SUBWF pwmTimeH,0 ;1
-000050 B4D8           00097         BTFSC STATUS,Z,0 ; 3
-000052 0012           00098         RETURN ; 2 cycles
-000054 EC?? F???      00099         CALL COUNT_X
-000058 2A20           00100         INCF pwmTimeH,1,0 ; 1 cycle
-00005A EF?? F???      00101         GOTO SERVO_LOOP_X ;2
-                      00102         
+00004A                00094         SERVO_LOOP_X
+                      00095         ;MOVFF pwmTimeH,LATD
+00004A 2803           00096         INCF position,0,0
+00004C 5C20           00097         SUBWF pwmTimeH,0 ;1
+00004E B4D8           00098         BTFSC STATUS,Z,0 ; 3
+000050 0012           00099         RETURN ; 2 cycles
+000052 EC?? F???      00100         CALL COUNT_X
+000056 2A20           00101         INCF pwmTimeH,1,0 ; 1 cycle
+000058 EF?? F???      00102         GOTO SERVO_LOOP_X ;2
+                      00103         
 Warning[207]: Found label after column 1. (COUNT_X)
-00005E                00103         COUNT_X
-00005E 6A21           00104             CLRF pwmTimeL,0
+00005C                00104         COUNT_X
+00005C 6A21           00105             CLRF pwmTimeL,0
 Warning[207]: Found label after column 1. (SERVO_X_COUNT_LOOP)
-000060                00105             SERVO_X_COUNT_LOOP
-000060 0E32           00106             MOVLW .50 ; 1 Cycle
-000062 5C21           00107             SUBWF pwmTimeL,0 ;1
-000064 B4D8           00108             BTFSC STATUS,Z,0 ; 3
-000066 0012           00109             RETURN ; 2 cycles
-000068 2A21           00110             INCF pwmTimeL,1,0 ; 1 cycle
-00006A EF?? F???      00111             GOTO SERVO_X_COUNT_LOOP ;2
-                      00112         
+00005E                00106             SERVO_X_COUNT_LOOP
+00005E 0E32           00107             MOVLW .50 ; 1 Cycle
+000060 5C21           00108             SUBWF pwmTimeL,0 ;1
+000062 B4D8           00109             BTFSC STATUS,Z,0 ; 3
+000064 0012           00110             RETURN ; 2 cycles
+000066 2A21           00111             INCF pwmTimeL,1,0 ; 1 cycle
+000068 EF?? F???      00112             GOTO SERVO_X_COUNT_LOOP ;2
+                      00113         
 Warning[207]: Found label after column 1. (CHECK_SERVO_Y)
-00006E                00113     CHECK_SERVO_Y
-00006E EC?? F???      00114         CALL COUNT_Y 
-000072 EC?? F???      00115         CALL COUNT_Y
-000076 6A20           00116         CLRF pwmTimeH,0
-                      00117         
+00006C                00114     CHECK_SERVO_Y
+00006C EC?? F???      00115         CALL COUNT_Y 
+000070 EC?? F???      00116         CALL COUNT_Y
+000074 6A20           00117         CLRF pwmTimeH,0
+                      00118         
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
 Warning[207]: Found label after column 1. (SERVO_LOOP_Y)
-000078                00118         SERVO_LOOP_Y
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE  4
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                      00119         ;MOVFF pwmTimeH,LATD
-000078 B009           00120         BTFSC servoFlags,0,0
-00007A 0E01           00121         MOVLW .1
-00007C A009           00122         BTFSS servoFlags,0,0
-00007E 0E08           00123         MOVLW .8
-                      00124         
-000080 5C20           00125         SUBWF pwmTimeH,0 ;1
-000082 B4D8           00126         BTFSC STATUS,Z,0 ; 3
-000084 0012           00127         RETURN ; 2 cycles
-000086 EC?? F???      00128         CALL COUNT_Y
-00008A 2A20           00129         INCF pwmTimeH,1,0 ; 1 cycle
-00008C EF?? F???      00130         GOTO SERVO_LOOP_Y ;2
-                      00131         
+000076                00119         SERVO_LOOP_Y
+                      00120         ;MOVFF pwmTimeH,LATD
+000076 A009           00121         BTFSS servoFlags,0,0
+000078 0E01           00122         MOVLW .1
+00007A B009           00123         BTFSC servoFlags,0,0
+00007C 0E08           00124         MOVLW .8
+                      00125         
+00007E 5C20           00126         SUBWF pwmTimeH,0 ;1
+000080 B4D8           00127         BTFSC STATUS,Z,0 ; 3
+000082 EF?? F???      00128         GOTO END_SERVO_Y ; 2 cycles
+000086 EC?? F???      00129         CALL COUNT_Y
+00008A 2A20           00130         INCF pwmTimeH,1,0 ; 1 cycle
+00008C EF?? F???      00131         GOTO SERVO_LOOP_Y ;2
+                      00132         
 Warning[207]: Found label after column 1. (COUNT_Y)
-000090                00132         COUNT_Y
-000090 6A21           00133             CLRF pwmTimeL,0
+000090                00133         COUNT_Y
+000090 6A21           00134             CLRF pwmTimeL,0
 Warning[207]: Found label after column 1. (SERVO_Y_COUNT_LOOP)
-000092                00134             SERVO_Y_COUNT_LOOP
-000092 0E32           00135             MOVLW .50 ; number to count to before 16ms has passed - 1 Cycle
-000094 5C21           00136             SUBWF pwmTimeL,0 ;1
-000096 B4D8           00137             BTFSC STATUS,Z,0 ; 3
-000098 0012           00138             RETURN ; 2 cycles
-00009A 2A21           00139             INCF pwmTimeL,1,0 ; 1 cycle
-00009C EF?? F???      00140             GOTO SERVO_Y_COUNT_LOOP ;2
-                      00141         
-0000A0 0012           00142         RETURN
+000092                00135             SERVO_Y_COUNT_LOOP
+000092 0E32           00136             MOVLW .50 ; number to count to before 16ms has passed - 1 Cycle
+000094 5C21           00137             SUBWF pwmTimeL,0 ;1
+000096 B4D8           00138             BTFSC STATUS,Z,0 ; 3
+000098 0012           00139             RETURN ; 2 cycles
+00009A 2A21           00140             INCF pwmTimeL,1,0 ; 1 cycle
+00009C EF?? F???      00141             GOTO SERVO_Y_COUNT_LOOP ;2
+Warning[207]: Found label after column 1. (END_SERVO_Y)
+0000A0                00142         END_SERVO_Y
                       00143         
-Warning[207]: Found label after column 1. (DEBOUNCE_LOOP)
-0000A2                00144     DEBOUNCE_LOOP
-                      00145         ; (1 + (1 + 1 + 3 + 1 + 2 + 8)*a + 2)*Fosc = 16ms
-0000A2 6A0A           00146         CLRF debouce_counterL,0 ; 1 cycle
-0000A4 6A0B           00147         CLRF debouce_counterH,0 ; 1 cycle
-Warning[207]: Found label after column 1. (INNER_BOUNCE_LOOP)
-0000A6                00148         INNER_BOUNCE_LOOP
-0000A6 2A0A           00149         INCF debouce_counterL,1,0 ; 1 cycle
-0000A8 B2D8           00150         BTFSC STATUS,DC,0           ; 2 cycles
-0000AA 2A0B           00151         INCF debouce_counterH,1,0    ; 1 cycle
-0000AC 0EC7           00152         MOVLW .199 ; number to count to before 16ms has passed - 1 Cycle
-0000AE 5C0B           00153         SUBWF debouce_counterH,0,0 ; 1 cycle
-0000B0 B4D8           00154         BTFSC STATUS,Z,0 ; 3 cycles
-0000B2 0012           00155         RETURN ; 2 cycles
-                      00156         
-0000B4 EF?? F???      00157         GOTO INNER_BOUNCE_LOOP ; 2 cycles
+0000A0 A009           00144         BTFSS servoFlags,0,0
+0000A2 0012           00145         RETURN
+                      00146         
+0000A4 0E14           00147         MOVLW .20
+0000A6 5C22           00148         SUBWF Hit_Counter,0,0
+0000A8 A4D8           00149         BTFSS STATUS,Z,0
+0000AA EF?? F???      00150         GOTO STILL_HITTING
+0000AE 9009           00151         BCF servoFlags,0,0
+0000B0 6A22           00152         CLRF Hit_Counter,0
+0000B2 0012           00153         RETURN
+                      00154         
+Warning[207]: Found label after column 1. (STILL_HITTING)
+0000B4                00155         STILL_HITTING
+0000B4 2A22           00156         INCF Hit_Counter,1,0
+0000B6 0012           00157         RETURN
                       00158         
-                      00159     
-Warning[207]: Found label after column 1. (CHANGE_MANUAL_MODE)
-0000B8                00160     CHANGE_MANUAL_MODE
-0000B8 90F0           00161         BCF INTCON3,INT1IF,0
-0000BA EC?? F???      00162         CALL DEBOUNCE_LOOP
-0000BE B281           00163         BTFSC PORTB,1,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not retu
-                            rn
-0000C0 0012           00164         RETURN
-                      00165         
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE  5
+Warning[207]: Found label after column 1. (DEBOUNCE_LOOP)
+0000B8                00159     DEBOUNCE_LOOP
+                      00160         ; (1 + (1 + 1 + 3 + 1 + 2 + 8)*a + 2)*Fosc = 16ms
+0000B8 6A0A           00161         CLRF debouce_counterL,0 ; 1 cycle
+0000BA 6A0B           00162         CLRF debouce_counterH,0 ; 1 cycle
+Warning[207]: Found label after column 1. (INNER_BOUNCE_LOOP)
+0000BC                00163         INNER_BOUNCE_LOOP
+0000BC 2A0A           00164         INCF debouce_counterL,1,0 ; 1 cycle
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE  5
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0000C2 BE04           00166         BTFSC flags,7,0
-0000C4 0011           00167         RETFIE FAST
-                      00168         
-0000C6 A604           00169         BTFSS flags,3,0
-0000C8 7204           00170         BTG flags,1,0
+0000BE B2D8           00165         BTFSC STATUS,DC,0           ; 2 cycles
+0000C0 2A0B           00166         INCF debouce_counterH,1,0    ; 1 cycle
+0000C2 0EC7           00167         MOVLW .199 ; number to count to before 16ms has passed - 1 Cycle
+0000C4 5C0B           00168         SUBWF debouce_counterH,0,0 ; 1 cycle
+0000C6 B4D8           00169         BTFSC STATUS,Z,0 ; 3 cycles
+0000C8 0012           00170         RETURN ; 2 cycles
                       00171         
-                      00172         ;GOTO MANUAL_LOOP
-0000CA 0012           00173         RETURN
-                      00174         
-Warning[207]: Found label after column 1. (CHANGE_MODE)
-0000CC                00175     CHANGE_MODE
-0000CC 92F0           00176         BCF INTCON3,INT2IF,0
-0000CE EC?? F???      00177         CALL DEBOUNCE_LOOP
-0000D2 B481           00178         BTFSC PORTB,2,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not retu
+0000CA EF?? F???      00172         GOTO INNER_BOUNCE_LOOP ; 2 cycles
+                      00173         
+                      00174     
+Warning[207]: Found label after column 1. (CHANGE_MANUAL_MODE)
+0000CE                00175     CHANGE_MANUAL_MODE
+0000CE 90F0           00176         BCF INTCON3,INT1IF,0
+0000D0 EC?? F???      00177         CALL DEBOUNCE_LOOP
+0000D4 B281           00178         BTFSC PORTB,1,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not retu
                             rn
-0000D4 0012           00179         RETURN
+0000D6 0012           00179         RETURN
                       00180         
-0000D6 B804           00181         BTFSC flags,4,0
-0000D8 0012           00182         RETURN
+0000D8 BE04           00181         BTFSC flags,7,0
+0000DA 0011           00182         RETFIE FAST
                       00183         
-0000DA BE04           00184         BTFSC flags,7,0
-0000DC 0012           00185         RETURN
+0000DC A604           00184         BTFSS flags,3,0
+0000DE 7204           00185         BTG flags,1,0
                       00186         
-0000DE 7604           00187         BTG flags,3,0
-                      00188         ;GOTO MANUAL_LOOP
-0000E0 0012           00189         RETURN
-                      00190         
-Warning[207]: Found label after column 1. (SET_RECORDING)
-0000E2                00191     SET_RECORDING
-                      00192                 
-0000E2 B604           00193         BTFSC flags,3,0
-0000E4 0012           00194         RETURN
+                      00187         ;GOTO MANUAL_LOOP
+0000E0 0012           00188         RETURN
+                      00189         
+Warning[207]: Found label after column 1. (CHANGE_MODE)
+0000E2                00190     CHANGE_MODE
+0000E2 92F0           00191         BCF INTCON3,INT2IF,0
+0000E4 EC?? F???      00192         CALL DEBOUNCE_LOOP
+0000E8 B481           00193         BTFSC PORTB,2,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not retu
+                            rn
+0000EA 0012           00194         RETURN
                       00195         
-                      00196         
-0000E6 B804           00197         BTFSC flags,4,0
-0000E8 EF?? F???      00198         GOTO OLD_REC
-0000EC EC?? F???      00199         CALL NEW_RECORDING
-0000F0 0012           00200         RETURN
+0000EC B804           00196         BTFSC flags,4,0
+0000EE 0012           00197         RETURN
+                      00198         
+0000F0 BE04           00199         BTFSC flags,7,0
+0000F2 0012           00200         RETURN
                       00201         
+0000F4 7604           00202         BTG flags,3,0
+                      00203         ;GOTO MANUAL_LOOP
+0000F6 0012           00204         RETURN
+                      00205         
+Warning[207]: Found label after column 1. (SET_RECORDING)
+0000F8                00206     SET_RECORDING
+                      00207                 
+0000F8 B604           00208         BTFSC flags,3,0
+0000FA 0012           00209         RETURN
+                      00210         
+                      00211         
+0000FC B804           00212         BTFSC flags,4,0
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0000FE EF?? F???      00213         GOTO OLD_REC
+000102 EC?? F???      00214         CALL NEW_RECORDING
+000106 0012           00215         RETURN
+                      00216         
 Warning[207]: Found label after column 1. (OLD_REC)
-0000F2                00202         OLD_REC
-0000F2 EC?? F???      00203         CALL REC_OVER
-                      00204         
-                      00205         ;BTG flags,4,0
-                      00206         
-0000F6 0012           00207         RETURN
-                      00208         
-                      00209         
-Warning[207]: Found label after column 1. (WIPE_RAM)
-0000F8                00210     WIPE_RAM
-0000F8 0E01           00211         MOVLW 0x001
-0000FA 6EE0           00212         MOVWF BSR,0  ; selecting bank 1 of the ram
-0000FC EE00 F040      00213         LFSR 0, Position_RAM_Notes
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE  6
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                      00214         
-Warning[207]: Found label after column 1. (WIPE_LOOP)
-000100                00215         WIPE_LOOP
-000100 B2EA           00216         BTFSC FSR0H, 1,0
-000102 0012           00217         RETURN
-                      00218         
-000104 6AEF           00219         CLRF INDF0,0
-000106 2AE9           00220         INCF FSR0L,1
-000108 B2D8           00221         BTFSC STATUS, DC,0
-00010A 2AEA           00222         INCF FSR0H,1
-00010C EF?? F???      00223         GOTO WIPE_LOOP
+000108                00217         OLD_REC
+000108 EC?? F???      00218         CALL REC_OVER
+                      00219         
+                      00220         ;BTG flags,4,0
+                      00221         
+00010C 0012           00222         RETURN
+                      00223         
                       00224         
+Warning[207]: Found label after column 1. (WIPE_RAM)
+00010E                00225     WIPE_RAM
+00010E 0E01           00226         MOVLW 0x001
+000110 6EE0           00227         MOVWF BSR,0  ; selecting bank 1 of the ram
+000112 EE00 F040      00228         LFSR 0, Position_RAM_Notes
+                      00229         
+Warning[207]: Found label after column 1. (WIPE_LOOP)
+000116                00230         WIPE_LOOP
+000116 B2EA           00231         BTFSC FSR0H, 1,0
+000118 0012           00232         RETURN
+                      00233         
+00011A 6AEF           00234         CLRF INDF0,0
+00011C 2AE9           00235         INCF FSR0L,1
+00011E B2D8           00236         BTFSC STATUS, DC,0
+000120 2AEA           00237         INCF FSR0H,1
+000122 EF?? F???      00238         GOTO WIPE_LOOP
+                      00239         
 Warning[207]: Found label after column 1. (ASK_JAVA)
-000110                00225     ASK_JAVA
-000110 0E50           00226         MOVLW 'P'
-000112 6EAD           00227         MOVWF TXREG,0
+000126                00240     ASK_JAVA
+000126 0E50           00241         MOVLW 'P'
+000128 6EAD           00242         MOVWF TXREG,0
 Warning[207]: Found label after column 1. (WAIT_TRANS_START_REC)
-000114                00228         WAIT_TRANS_START_REC
-000114 A2AC           00229             BTFSS TXSTA, 1, 0
-000116 EF?? F???      00230             GOTO WAIT_TRANS_START_REC
-                      00231         
-                      00232             
-Warning[207]: Found label after column 1. (WAIT_RX_START_REC)
-00011A                00233         WAIT_RX_START_REC
-                      00234             ;CALL CHECK_SERVOS
-00011A AA9E           00235             BTFSS PIR1, RCIF, 0
-00011C EF?? F???      00236             GOTO WAIT_RX_START_REC
-                      00237             
-                      00238         
-000120 0E4B           00239         MOVLW 'K'
-000122 5CAE           00240         SUBWF RCREG,0
-000124 B4D8           00241         BTFSC STATUS, Z, 0
-000126 8C04           00242         BSF flags,6,0
-                      00243         
-                      00244         ;BTFSC flags,6,0
-                      00245         ;SETF LATA,0
+00012A                00243         WAIT_TRANS_START_REC
+00012A A2AC           00244             BTFSS TXSTA, 1, 0
+00012C EF?? F???      00245             GOTO WAIT_TRANS_START_REC
                       00246         
-000128 B2AB           00247         BTFSC RCSTA,OERR,0 
-00012A EC?? F???      00248         CALL OVERRUN
-00012E 0012           00249         RETURN
-                      00250         
-                      00251         
-Warning[207]: Found label after column 1. (NEW_RECORDING)
-000130                00252     NEW_RECORDING
+                      00247             
+Warning[207]: Found label after column 1. (WAIT_RX_START_REC)
+000130                00248         WAIT_RX_START_REC
+                      00249             ;CALL CHECK_SERVOS
+000130 AA9E           00250             BTFSS PIR1, RCIF, 0
+000132 EF?? F???      00251             GOTO WAIT_RX_START_REC
+                      00252             
                       00253         
-000130 EC?? F???      00254         CALL WIPE_RAM
-000134 EC?? F???      00255         CALL ASK_JAVA
-000138 8804           00256         BSF flags,4,0
-                      00257         
-00013A 848B           00258         BSF LATC,2,0
-00013C 968B           00259         BCF LATC,3,0
-00013E 988B           00260         BCF LATC,4,0
-000140 EE00 F040      00261         LFSR 0, Position_RAM_Notes
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE  7
+000136 0E4B           00254         MOVLW 'K'
+000138 5CAE           00255         SUBWF RCREG,0
+00013A B4D8           00256         BTFSC STATUS, Z, 0
+00013C 8C04           00257         BSF flags,6,0
+                      00258         
+                      00259         ;BTFSC flags,6,0
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE  7
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-000144 EE10 F080      00262         LFSR 1, Position_RAM_Delay_L
-000148 EE20 F0C0      00263         LFSR 2, Position_RAM_Delay_H
-                      00264         ;INCF FSR0L,1
+                      00260         ;SETF LATA,0
+                      00261         
+00013E B2AB           00262         BTFSC RCSTA,OERR,0 
+000140 EC?? F???      00263         CALL OVERRUN
+000144 0012           00264         RETURN
                       00265         
                       00266         
-                      00267         
-00014C 6A0D           00268         CLRF recordTimeH,0
-00014E 6A0C           00269         CLRF recordTimeL,0
-000150 0012           00270         RETURN
-                      00271         
-Warning[207]: Found label after column 1. (RECORD_PRESSED)
-000152                00272     RECORD_PRESSED
-000152 B881           00273         BTFSC PORTB,4,0
-000154 0012           00274         RETURN
-000156 EC?? F???      00275         CALL DEBOUNCE_LOOP
-00015A A881           00276         BTFSS PORTB,4,0
-00015C 0012           00277         RETURN
-                      00278         
-00015E BE04           00279         BTFSC flags,7,0
-000160 0012           00280         RETURN
+Warning[207]: Found label after column 1. (NEW_RECORDING)
+000146                00267     NEW_RECORDING
+                      00268         
+000146 EC?? F???      00269         CALL WIPE_RAM
+00014A EC?? F???      00270         CALL ASK_JAVA
+00014E 8804           00271         BSF flags,4,0
+                      00272         
+000150 848B           00273         BSF LATC,2,0
+000152 968B           00274         BCF LATC,3,0
+000154 988B           00275         BCF LATC,4,0
+000156 EE00 F040      00276         LFSR 0, Position_RAM_Notes
+00015A EE10 F080      00277         LFSR 1, Position_RAM_Delay_L
+00015E EE20 F0C0      00278         LFSR 2, Position_RAM_Delay_H
+                      00279         ;INCF FSR0L,1
+                      00280         
                       00281         
-000162 EC?? F???      00282         CALL SET_RECORDING
-                      00283         
-                      00284         
+                      00282         
+000162 6A0D           00283         CLRF recordTimeH,0
+000164 6A0C           00284         CLRF recordTimeL,0
+000166 0012           00285         RETURN
+                      00286         
+Warning[207]: Found label after column 1. (RECORD_PRESSED)
+000168                00287     RECORD_PRESSED
+000168 B881           00288         BTFSC PORTB,4,0
+00016A 0012           00289         RETURN
+00016C EC?? F???      00290         CALL DEBOUNCE_LOOP
+000170 A881           00291         BTFSS PORTB,4,0
+000172 0012           00292         RETURN
+                      00293         
+000174 BE04           00294         BTFSC flags,7,0
+000176 0012           00295         RETURN
+                      00296         
+000178 EC?? F???      00297         CALL SET_RECORDING
+                      00298         
+                      00299         
 Warning[207]: Found label after column 1. (RECORD_PRESSED_LOOP)
-000166                00285         RECORD_PRESSED_LOOP
-000166 A881           00286         BTFSS PORTB,4,0
-000168 EF?? F???      00287         GOTO RECORD_PRESSED_LOOP
-                      00288         
-                      00289         ;MOVFF flags,PORTA
-00016C EF?? F???      00290         GOTO MAIN_LOOP
-                      00291         
-Warning[207]: Found label after column 1. (PLAY_BUTTON_INTERRUPT)
-000170                00292     PLAY_BUTTON_INTERRUPT
-000170 92F2           00293         BCF INTCON,INT0IF,0
-000172 EC?? F???      00294         CALL DEBOUNCE_LOOP
-000176 B081           00295         BTFSC PORTB,0,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not retu
-                            rn
-000178 0012           00296         RETURN
-                      00297         
-00017A B804           00298         BTFSC flags,4,0
-00017C 0012           00299         RETURN
-                      00300         
-00017E 8E04           00301         BSF flags,7,0
-000180 0012           00302         RETURN
+00017C                00300         RECORD_PRESSED_LOOP
+00017C A881           00301         BTFSS PORTB,4,0
+00017E EF?? F???      00302         GOTO RECORD_PRESSED_LOOP
                       00303         
-Warning[207]: Found label after column 1. (PLAY_RECORDING)
-000182                00304     PLAY_RECORDING 
-                      00305         ;CALL DISABLE_INTERRUPTS_EXCEPT_PWM
+                      00304         ;MOVFF flags,PORTA
+000182 EF?? F???      00305         GOTO MAIN_LOOP
                       00306         
-000182 0E01           00307         MOVLW 0x001
-000184 6EE0           00308         MOVWF BSR,0  ; selecting bank 1 of the ram
-                      00309         
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE  8
+Warning[207]: Found label after column 1. (PLAY_BUTTON_INTERRUPT)
+000186                00307     PLAY_BUTTON_INTERRUPT
+000186 92F2           00308         BCF INTCON,INT0IF,0
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE  8
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00310         
-000186 EE00 F040      00311         LFSR 0, Position_RAM_Notes
-00018A EE10 F080      00312         LFSR 1, Position_RAM_Delay_L
-00018E EE20 F0C0      00313         LFSR 2, Position_RAM_Delay_H
-                      00314         
+000188 EC?? F???      00309         CALL DEBOUNCE_LOOP
+00018C B081           00310         BTFSC PORTB,0,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not retu
+                            rn
+00018E 0012           00311         RETURN
+                      00312         
+000190 B804           00313         BTFSC flags,4,0
+000192 0012           00314         RETURN
+                      00315         
+000194 8E04           00316         BSF flags,7,0
+000196 0012           00317         RETURN
+                      00318         
+Warning[207]: Found label after column 1. (PLAY_RECORDING)
+000198                00319     PLAY_RECORDING 
+                      00320         ;CALL DISABLE_INTERRUPTS_EXCEPT_PWM
+                      00321         
+000198 0E01           00322         MOVLW 0x001
+00019A 6EE0           00323         MOVWF BSR,0  ; selecting bank 1 of the ram
+                      00324         
+                      00325         
+00019C EE00 F040      00326         LFSR 0, Position_RAM_Notes
+0001A0 EE10 F080      00327         LFSR 1, Position_RAM_Delay_L
+0001A4 EE20 F0C0      00328         LFSR 2, Position_RAM_Delay_H
+                      00329         
 Warning[207]: Found label after column 1. (PLAY_LOOP)
-000192                00315         PLAY_LOOP
-000192 CFEF F002      00316             MOVFF INDF0, readL
-000196 CFE7 F007      00317             MOVFF INDF1, savedTimeL
-00019A CFDF F008      00318             MOVFF INDF2,savedTimeH
-                      00319             ;MOVFF savedTimeL,LATA
-                      00320             ;MOVFF savedTimeH,LATD
-                      00321             
-00019E 2AE9           00322             INCF FSR0L,1
-0001A0 2AE1           00323             INCF FSR1L,1
-0001A2 2AD9           00324             INCF FSR2L,1
-                      00325             
-0001A4 0E08           00326             MOVLW .8
-0001A6 6002           00327             CPFSLT readL,0
-0001A8 EF?? F???      00328             GOTO DONE_PLAYING
-                      00329             
-0001AC C002 F003      00330             MOVFF readL,position
-0001B0 EC?? F???      00331             CALL CONVERT_POS_TIME
-                      00332             
-0001B4 6A0C           00333             CLRF recordTimeL,0
-0001B6 6A0D           00334             CLRF recordTimeH,0
-                      00335             
+0001A8                00330         PLAY_LOOP
+0001A8 CFEF F002      00331             MOVFF INDF0, readL
+0001AC CFE7 F007      00332             MOVFF INDF1, savedTimeL
+0001B0 CFDF F008      00333             MOVFF INDF2,savedTimeH
+                      00334             ;MOVFF savedTimeL,LATA
+                      00335             ;MOVFF savedTimeH,LATD
+                      00336             
+0001B4 2AE9           00337             INCF FSR0L,1
+0001B6 2AE1           00338             INCF FSR1L,1
+0001B8 2AD9           00339             INCF FSR2L,1
+                      00340             
+0001BA 0E08           00341             MOVLW .8
+0001BC 6002           00342             CPFSLT readL,0
+0001BE EF?? F???      00343             GOTO DONE_PLAYING
+                      00344             
+0001C2 C002 F003      00345             MOVFF readL,position
+0001C6 EC?? F???      00346             CALL CONVERT_POS_TIME
+                      00347             
+0001CA 6A0C           00348             CLRF recordTimeL,0
+0001CC 6A0D           00349             CLRF recordTimeH,0
+                      00350             
 Warning[207]: Found label after column 1. (DELAY_LOOP)
-0001B8                00336             DELAY_LOOP
-                      00337                 
-0001B8 C00D F001      00338                 MOVFF recordTimeH,readH
-0001BC C00C F002      00339                 MOVFF recordTimeL,readL
-                      00340                 ;MOVFF readH,LATD
-                      00341                 ;MOVFF savedTimeH,LATA
-                      00342                 
-                      00343                 
-0001C0 5008           00344                 MOVF savedTimeH,0,0 ; 11101010
-0001C2 6001           00345                 CPFSLT readH,0
-0001C4 EF?? F???      00346                 GOTO GT_OR_EQ_DELAY
-0001C8 EF?? F???      00347                 GOTO DELAY_LOOP
-                      00348 
+0001CE                00351             DELAY_LOOP
+                      00352                 
+0001CE C00D F001      00353                 MOVFF recordTimeH,readH
+0001D2 C00C F002      00354                 MOVFF recordTimeL,readL
+                      00355                 ;MOVFF readH,LATD
+                      00356                 ;MOVFF savedTimeH,LATA
+                      00357                 
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00358                 
+0001D6 5008           00359                 MOVF savedTimeH,0,0 ; 11101010
+0001D8 6001           00360                 CPFSLT readH,0
+0001DA EF?? F???      00361                 GOTO GT_OR_EQ_DELAY
+0001DE EF?? F???      00362                 GOTO DELAY_LOOP
+                      00363 
 Warning[207]: Found label after column 1. (GT_OR_EQ_DELAY)
-0001CC                00349                 GT_OR_EQ_DELAY
-                      00350                 ;BSF LATA,2,0
-0001CC 6401           00351                 CPFSGT readH,0
-0001CE EF?? F???      00352                 GOTO EQ_DELAY
-0001D2 EF?? F???      00353                 GOTO DONE_DELAY
-                      00354 
+0001E2                00364                 GT_OR_EQ_DELAY
+                      00365                 ;BSF LATA,2,0
+0001E2 6401           00366                 CPFSGT readH,0
+0001E4 EF?? F???      00367                 GOTO EQ_DELAY
+0001E8 EF?? F???      00368                 GOTO DONE_DELAY
+                      00369 
 Warning[207]: Found label after column 1. (EQ_DELAY)
-0001D6                00355                 EQ_DELAY
-                      00356                 ;BSF LATA,3,0
-0001D6 5007           00357                 MOVF savedTimeL,0,0 ; 01100000
-0001D8 6002           00358                 CPFSLT readL,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE  9
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0001DA EF?? F???      00359                 GOTO DONE_DELAY
-0001DE EF?? F???      00360                 GOTO DELAY_LOOP
-                      00361 
+0001EC                00370                 EQ_DELAY
+                      00371                 ;BSF LATA,3,0
+0001EC 5007           00372                 MOVF savedTimeL,0,0 ; 01100000
+0001EE 6002           00373                 CPFSLT readL,0
+0001F0 EF?? F???      00374                 GOTO DONE_DELAY
+0001F4 EF?? F???      00375                 GOTO DELAY_LOOP
+                      00376 
 Warning[207]: Found label after column 1. (DONE_DELAY)
-0001E2                00362             DONE_DELAY
-                      00363             ;MOVFF position, LATA
-                      00364             ;BTG LATD,7,0
-                      00365             
-                      00366             
-                      00367             
-0001E2 EC?? F???      00368             CALL HIT_NOTE
-                      00369             
-                      00370             
-                      00371 
-0001E6 EF?? F???      00372             GOTO PLAY_LOOP
-                      00373         
+0001F8                00377             DONE_DELAY
+                      00378             ;MOVFF position, LATA
+                      00379             ;BTG LATD,7,0
+                      00380             
+                      00381             
+                      00382             
+0001F8 EC?? F???      00383             CALL HIT_NOTE
+                      00384             
+                      00385             
+                      00386 
+0001FC EF?? F???      00387             GOTO PLAY_LOOP
+                      00388         
 Warning[207]: Found label after column 1. (DONE_PLAYING)
-0001EA                00374         DONE_PLAYING
-0001EA 9E04           00375         BCF flags,7,0
-                      00376         
-0001EC EC?? F???      00377         CALL ENABLE_INTERRUPTS_EXCEPT_PWM ; re-enable interrupts
-                      00378         
-0001F0 0012           00379         RETURN
-                      00380         
-Warning[207]: Found label after column 1. (HIGH_RSI)
-0001F2                00381     HIGH_RSI
-0001F2 B0F0           00382         BTFSC INTCON3,INT1IF,0
-0001F4 EC?? F???      00383         CALL CHANGE_MANUAL_MODE
-0001F8 B2F0           00384         BTFSC INTCON3,INT2IF,0
-0001FA EC?? F???      00385         CALL CHANGE_MODE
-0001FE B2F2           00386         BTFSC INTCON,INT0IF,0
-000200 EC?? F???      00387         CALL PLAY_BUTTON_INTERRUPT
-000204 B4F2           00388         BTFSC INTCON, TMR0IF,0
-000206 EF?? F???      00389         GOTO TMR0_INTERRUPT
-                      00390         
+000200                00389         DONE_PLAYING
+000200 9E04           00390         BCF flags,7,0
                       00391         
-00020A 0011           00392         RETFIE FAST
+000202 EC?? F???      00392         CALL ENABLE_INTERRUPTS_EXCEPT_PWM ; re-enable interrupts
                       00393         
+000206 0012           00394         RETURN
+                      00395         
+Warning[207]: Found label after column 1. (HIGH_RSI)
+000208                00396     HIGH_RSI
+000208 B0F0           00397         BTFSC INTCON3,INT1IF,0
+00020A EC?? F???      00398         CALL CHANGE_MANUAL_MODE
+00020E B2F0           00399         BTFSC INTCON3,INT2IF,0
+000210 EC?? F???      00400         CALL CHANGE_MODE
+000214 B2F2           00401         BTFSC INTCON,INT0IF,0
+000216 EC?? F???      00402         CALL PLAY_BUTTON_INTERRUPT
+00021A B4F2           00403         BTFSC INTCON, TMR0IF,0
+00021C EF?? F???      00404         GOTO TMR0_INTERRUPT
+                      00405         
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00406         
+000220 0011           00407         RETFIE FAST
+                      00408         
 Warning[207]: Found label after column 1. (DISABLE_INTERRUPTS_EXCEPT_PWM)
-00020C                00394     DISABLE_INTERRUPTS_EXCEPT_PWM
-00020C 98F2           00395         BCF INTCON, INT0IE,0 ; enable INT0 interrupt
-00020E 96F0           00396         BCF INTCON3, INT1IE,0 ; enable INT1 interrupt
-000210 98F0           00397         BCF INTCON3, INT2IE,0 ; enable INT2 interrupt
-000212 0012           00398         RETURN
+000222                00409     DISABLE_INTERRUPTS_EXCEPT_PWM
+000222 98F2           00410         BCF INTCON, INT0IE,0 ; enable INT0 interrupt
+000224 96F0           00411         BCF INTCON3, INT1IE,0 ; enable INT1 interrupt
+000226 98F0           00412         BCF INTCON3, INT2IE,0 ; enable INT2 interrupt
+000228 0012           00413         RETURN
 Warning[207]: Found label after column 1. (ENABLE_INTERRUPTS_EXCEPT_PWM)
-000214                00399     ENABLE_INTERRUPTS_EXCEPT_PWM
-000214 88F2           00400         BSF INTCON, INT0IE,0 ; enable INT0 interrupt
-000216 86F0           00401         BSF INTCON3, INT1IE,0 ; enable INT1 interrupt
-000218 88F0           00402         BSF INTCON3, INT2IE,0 ; enable INT2 interrupt
-00021A 0012           00403         RETURN
-                      00404         
+00022A                00414     ENABLE_INTERRUPTS_EXCEPT_PWM
+00022A 88F2           00415         BSF INTCON, INT0IE,0 ; enable INT0 interrupt
+00022C 86F0           00416         BSF INTCON3, INT1IE,0 ; enable INT1 interrupt
+00022E 88F0           00417         BSF INTCON3, INT2IE,0 ; enable INT2 interrupt
+000230 0012           00418         RETURN
+                      00419         
 Warning[207]: Found label after column 1. (INIT_INTERRUPTS)
-00021C                00405     INIT_INTERRUPTS
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 10
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                      00406         ; Configure RB1 so it generates a High Priority Interrupt 
-                      00407         ; when a falling edge is detected.
-00021C 9ED0           00408         BCF RCON,IPEN,0 ; no priorities so everything is high priority
-00021E 9EF1           00409         BCF INTCON2,RBPU,0 ; enable pull ups
-000220 9CF1           00410         BCF INTCON2,INTEDG0,0 ; falling edge int1
-000222 9AF1           00411         BCF INTCON2,INTEDG1,0 ; falling edge int1
-000224 98F1           00412         BCF INTCON2,INTEDG2,0 ; falling edge int1
-                      00413         
-000226 84F1           00414         BSF INTCON2, TMR0IP,0 ; set TMR0 interrupt as high priority
-                      00415         
-000228 88F2           00416         BSF INTCON, INT0IE,0 ; enable INT0 interrupt
-00022A 86F0           00417         BSF INTCON3, INT1IE,0 ; enable INT1 interrupt
-00022C 88F0           00418         BSF INTCON3, INT2IE,0 ; enable INT2 interrupt
-00022E 8EF2           00419         BSF INTCON, 7,0; enable global interrupts
-000230 8CF2           00420         BSF INTCON, 6,0;
-                      00421 
-000232 0012           00422         RETURN
+000232                00420     INIT_INTERRUPTS
+                      00421         ; Configure RB1 so it generates a High Priority Interrupt 
+                      00422         ; when a falling edge is detected.
+000232 9ED0           00423         BCF RCON,IPEN,0 ; no priorities so everything is high priority
+000234 9EF1           00424         BCF INTCON2,RBPU,0 ; enable pull ups
+000236 9CF1           00425         BCF INTCON2,INTEDG0,0 ; falling edge int1
+000238 9AF1           00426         BCF INTCON2,INTEDG1,0 ; falling edge int1
+00023A 98F1           00427         BCF INTCON2,INTEDG2,0 ; falling edge int1
+                      00428         
+00023C 84F1           00429         BSF INTCON2, TMR0IP,0 ; set TMR0 interrupt as high priority
+                      00430         
+00023E 88F2           00431         BSF INTCON, INT0IE,0 ; enable INT0 interrupt
+000240 86F0           00432         BSF INTCON3, INT1IE,0 ; enable INT1 interrupt
+000242 88F0           00433         BSF INTCON3, INT2IE,0 ; enable INT2 interrupt
+000244 8EF2           00434         BSF INTCON, 7,0; enable global interrupts
+000246 8CF2           00435         BSF INTCON, 6,0;
+                      00436 
+000248 0012           00437         RETURN
 Warning[207]: Found label after column 1. (INIT_EUSART)
-000234                00423     INIT_EUSART
-                      00424         
-000234 0E24           00425         MOVLW b'00100100' ; SYNCH -0 BRGH - 1 
-000236 6EAC           00426         MOVWF TXSTA,0
-000238 0E91           00427         MOVLW b'10010001'   ; RX9 - 0
-00023A 6EAB           00428         MOVWF RCSTA,0
-00023C 0E48           00429         MOVLW b'01001000' ; BRG16 - 1
-00023E 6EB8           00430         MOVWF BAUDCON,0
-000240 0ECF           00431         MOVLW .207       ; baud rate of 9600
-000242 6EAF           00432         MOVWF SPBRG,0
-                      00433         ;MOVLW b'00000000'
-                      00434         ;MOVWF SPBRGH,0
-000244 6AB0           00435         CLRF SPBRGH,0
-000246 0012           00436         RETURN
-                      00437     
+00024A                00438     INIT_EUSART
+                      00439         
+00024A 0E24           00440         MOVLW b'00100100' ; SYNCH -0 BRGH - 1 
+00024C 6EAC           00441         MOVWF TXSTA,0
+00024E 0E91           00442         MOVLW b'10010001'   ; RX9 - 0
+000250 6EAB           00443         MOVWF RCSTA,0
+000252 0E48           00444         MOVLW b'01001000' ; BRG16 - 1
+000254 6EB8           00445         MOVWF BAUDCON,0
+000256 0ECF           00446         MOVLW .207       ; baud rate of 9600
+000258 6EAF           00447         MOVWF SPBRG,0
+                      00448         ;MOVLW b'00000000'
+                      00449         ;MOVWF SPBRGH,0
+00025A 6AB0           00450         CLRF SPBRGH,0
+00025C 0012           00451         RETURN
+                      00452     
 Warning[207]: Found label after column 1. (INIT_OSC)
-000248                00438     INIT_OSC
-000248 0E72           00439         MOVLW b'01110010'    ; 1MHz 1us
-00024A 6ED3           00440         MOVWF   OSCCON,0 
-00024C 0E98           00441         MOVLW b'10011000' ; 16 bit timer - no prescaler 
-00024E 6ED5           00442         MOVWF T0CON,0
-000250 0012           00443         RETURN
-                      00444         
-                      00445     
+00025E                00453     INIT_OSC
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00025E 0E72           00454         MOVLW b'01110010'    ; 1MHz 1us
+000260 6ED3           00455         MOVWF   OSCCON,0 
+000262 0E98           00456         MOVLW b'10011000' ; 16 bit timer - no prescaler 
+000264 6ED5           00457         MOVWF T0CON,0
+000266 0012           00458         RETURN
+                      00459         
+                      00460     
 Warning[207]: Found label after column 1. (INIT_PORTS)
-000252                00446     INIT_PORTS
-000252 0E03           00447         MOVLW b'00000011'
-000254 6EC2           00448         MOVWF ADCON0,0
-000256 0E0E           00449         MOVLW b'00001110'
-000258 6EC1           00450         MOVWF ADCON1,0
-00025A 0E89           00451         MOVLW b'10001001'
-00025C 6EC0           00452         MOVWF ADCON2,0
-00025E 6A92           00453         CLRF TRISA,0
-000260 8092           00454         BSF TRISA,0,0
-000262 6A94           00455         CLRF TRISC,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 11
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-000264 8C94           00456         BSF TRISC,6,0
-000266 8E94           00457         BSF TRISC,7,0
-000268 6A95           00458         CLRF TRISD,0
-00026A 0012           00459         RETURN
-                      00460 
+000268                00461     INIT_PORTS
+000268 0E03           00462         MOVLW b'00000011'
+00026A 6EC2           00463         MOVWF ADCON0,0
+00026C 0E0E           00464         MOVLW b'00001110'
+00026E 6EC1           00465         MOVWF ADCON1,0
+000270 0E89           00466         MOVLW b'10001001'
+000272 6EC0           00467         MOVWF ADCON2,0
+000274 6A92           00468         CLRF TRISA,0
+000276 8092           00469         BSF TRISA,0,0
+000278 6A94           00470         CLRF TRISC,0
+00027A 8C94           00471         BSF TRISC,6,0
+00027C 8E94           00472         BSF TRISC,7,0
+00027E 6A95           00473         CLRF TRISD,0
+000280 0012           00474         RETURN
+                      00475 
 Warning[207]: Found label after column 1. (READ_VALUE)
-00026C                00461     READ_VALUE
-00026C CFC4 F001      00462         MOVFF ADRESH,readH
-000270 CFC3 F002      00463         MOVFF ADRESL,readL
-000274 0012           00464         RETURN
-                      00465         
+000282                00476     READ_VALUE
+000282 CFC4 F001      00477         MOVFF ADRESH,readH
+000286 CFC3 F002      00478         MOVFF ADRESL,readL
+00028A 0012           00479         RETURN
+                      00480         
 Warning[207]: Found label after column 1. (DISPLAY_NOTE)
-000276                00466     DISPLAY_NOTE
-000276 C003 FFE8      00467         MOVFF position, WREG
-00027A 0F10           00468         ADDLW 0x10
-00027C 6EF6           00469         MOVWF TBLPTRL,0
-00027E 6AF7           00470         CLRF TBLPTRH,0
-000280 6AF8           00471         CLRF TBLPTRU,0
-                      00472         
-000282 0008           00473         TBLRD*
-000284 CFF5 FF8C      00474         MOVFF TABLAT,LATD
-000288 0012           00475         RETURN
-                      00476         
-                      00477         
+00028C                00481     DISPLAY_NOTE
+00028C C003 FFE8      00482         MOVFF position, WREG
+000290 0F10           00483         ADDLW 0x10
+000292 6EF6           00484         MOVWF TBLPTRL,0
+000294 6AF7           00485         CLRF TBLPTRH,0
+000296 6AF8           00486         CLRF TBLPTRU,0
+                      00487         
+000298 0008           00488         TBLRD*
+00029A CFF5 FF8C      00489         MOVFF TABLAT,LATD
+00029E 0012           00490         RETURN
+                      00491         
+                      00492         
 Warning[207]: Found label after column 1. (CHECK_LEFT)
-00028A                00478     CHECK_LEFT
-                      00479         
-                      00480         ; checking if < 100
-00028A 0E01           00481         MOVLW .1
-00028C 6001           00482         CPFSLT readH,0
-00028E 0012           00483         RETURN
-000290 0E64           00484         MOVLW LOW(.100)
-000292 6002           00485         CPFSLT readL,0
-000294 0012           00486         RETURN
-                      00487         ; threshold for centre is left < 100
-                      00488         
-000296 0E00           00489         MOVLW .0
-000298 5C03           00490         SUBWF position,0
-00029A A4D8           00491         BTFSS STATUS,Z,0
-00029C 0603           00492         DECF position,1
-                      00493         
-00029E 8004           00494         BSF flags,0,0
-                      00495         
-0002A0 6A05           00496         CLRF timeNoteL,0
-0002A2 6A06           00497         CLRF timeNoteH,0
-0002A4 EC?? F???      00498         CALL CONVERT_POS_TIME
-                      00499         
-0002A8 0012           00500         RETURN
-                      00501         
-Warning[207]: Found label after column 1. (CHECK_RIGHT)
-0002AA                00502     CHECK_RIGHT
-                      00503         ;checking if > 900
-0002AA 0E02           00504         MOVLW .2
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 12
+0002A0                00493     CHECK_LEFT
+                      00494         
+                      00495         ; checking if < 100
+0002A0 0E01           00496         MOVLW .1
+0002A2 6001           00497         CPFSLT readH,0
+0002A4 0012           00498         RETURN
+0002A6 0E64           00499         MOVLW LOW(.100)
+0002A8 6002           00500         CPFSLT readL,0
+0002AA 0012           00501         RETURN
+                      00502         ; threshold for centre is left < 100
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 12
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0002AC 6401           00505         CPFSGT readH,0
-0002AE 0012           00506         RETURN
-0002B0 0E84           00507         MOVLW LOW(.900)
-0002B2 6402           00508         CPFSGT readL,0
-0002B4 0012           00509         RETURN
+                      00503         
+0002AC 0E00           00504         MOVLW .0
+0002AE 5C03           00505         SUBWF position,0
+0002B0 A4D8           00506         BTFSS STATUS,Z,0
+0002B2 0603           00507         DECF position,1
+                      00508         
+0002B4 8004           00509         BSF flags,0,0
                       00510         
-                      00511         ; threshold for centre is 900 < right
-                      00512         
-0002B6 0E07           00513         MOVLW .7
-0002B8 5C03           00514         SUBWF position,0
-0002BA A4D8           00515         BTFSS STATUS,Z,0
-0002BC 2A03           00516         INCF position,1
-0002BE 8004           00517         BSF flags,0,0
-                      00518         
-0002C0 6A05           00519         CLRF timeNoteL,0
-0002C2 6A06           00520         CLRF timeNoteH,0
-0002C4 EC?? F???      00521         CALL CONVERT_POS_TIME
-                      00522         
-0002C8 0012           00523         RETURN
-                      00524         
+0002B6 6A05           00511         CLRF timeNoteL,0
+0002B8 6A06           00512         CLRF timeNoteH,0
+0002BA EC?? F???      00513         CALL CONVERT_POS_TIME
+                      00514         
+0002BE 0012           00515         RETURN
+                      00516         
+Warning[207]: Found label after column 1. (CHECK_RIGHT)
+0002C0                00517     CHECK_RIGHT
+                      00518         ;checking if > 900
+0002C0 0E02           00519         MOVLW .2
+0002C2 6401           00520         CPFSGT readH,0
+0002C4 0012           00521         RETURN
+0002C6 0E84           00522         MOVLW LOW(.900)
+0002C8 6402           00523         CPFSGT readL,0
+0002CA 0012           00524         RETURN
+                      00525         
+                      00526         ; threshold for centre is 900 < right
+                      00527         
+0002CC 0E07           00528         MOVLW .7
+0002CE 5C03           00529         SUBWF position,0
+0002D0 A4D8           00530         BTFSS STATUS,Z,0
+0002D2 2A03           00531         INCF position,1
+0002D4 8004           00532         BSF flags,0,0
+                      00533         
+0002D6 6A05           00534         CLRF timeNoteL,0
+0002D8 6A06           00535         CLRF timeNoteH,0
+0002DA EC?? F???      00536         CALL CONVERT_POS_TIME
+                      00537         
+0002DE 0012           00538         RETURN
+                      00539         
 Warning[207]: Found label after column 1. (CHECK_CENTRE)
-0002CA                00525     CHECK_CENTRE
-                      00526         ;checking if > 450
-0002CA 0E01           00527         MOVLW .1
-0002CC 6201           00528         CPFSEQ readH,0
-0002CE EF?? F???      00529         GOTO check2
-0002D2 0EC8           00530         MOVLW .200
-0002D4 6402           00531         CPFSGT readL,0
-0002D6 0012           00532         RETURN
-0002D8 EF?? F???      00533         GOTO middle
-                      00534         
-                      00535         ; checking if < 550
-Warning[207]: Found label after column 1. (check2)
-0002DC                00536         check2
-0002DC 0E02           00537         MOVLW .2
-0002DE 6201           00538         CPFSEQ readH,0
-0002E0 0012           00539         RETURN
-0002E2 0E32           00540         MOVLW .50
-0002E4 6002           00541         CPFSLT readL,0
-0002E6 0012           00542         RETURN
-                      00543         
-                      00544         ; threshold for centre is 450< centre <550
-Warning[207]: Found label after column 1. (middle)
-0002E8                00545         middle
-0002E8 9004           00546         BCF flags,0,0
-                      00547         
-0002EA 0012           00548         RETURN
+0002E0                00540     CHECK_CENTRE
+                      00541         ;checking if > 450
+0002E0 0E01           00542         MOVLW .1
+0002E2 6201           00543         CPFSEQ readH,0
+0002E4 EF?? F???      00544         GOTO check2
+0002E8 0EC8           00545         MOVLW .200
+0002EA 6402           00546         CPFSGT readL,0
+0002EC 0012           00547         RETURN
+0002EE EF?? F???      00548         GOTO middle
                       00549         
-Warning[207]: Found label after column 1. (CHECK_REC_TIME)
-0002EC                00550     CHECK_REC_TIME
-                      00551         ;checking if > 60000
-                      00552                 
-                      00553         ;MOVFF readH,LATA
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 13
+                      00550         ; checking if < 550
+Warning[207]: Found label after column 1. (check2)
+0002F2                00551         check2
+0002F2 0E02           00552         MOVLW .2
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 13
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0002EC 0EEA           00554         MOVLW HIGH(.60000) ; 11101010
-0002EE 600D           00555         CPFSLT recordTimeH,0
-0002F0 EF?? F???      00556         GOTO GT_OR_EQ_60
-0002F4 0012           00557         RETURN
+0002F4 6201           00553         CPFSEQ readH,0
+0002F6 0012           00554         RETURN
+0002F8 0E32           00555         MOVLW .50
+0002FA 6002           00556         CPFSLT readL,0
+0002FC 0012           00557         RETURN
                       00558         
-Warning[207]: Found label after column 1. (GT_OR_EQ_60)
-0002F6                00559         GT_OR_EQ_60
-                      00560         ;BSF LATA,2,0
-0002F6 640D           00561         CPFSGT recordTimeH,0
-0002F8 EF?? F???      00562         GOTO EQ_60
-0002FC 8A04           00563         BSF flags,5,0
-0002FE 0012           00564         RETURN
-                      00565         
-Warning[207]: Found label after column 1. (EQ_60)
-000300                00566         EQ_60
-                      00567         ;BSF LATA,3,0
-000300 0E60           00568         MOVLW LOW(.60000)  ; 01100000
-000302 600C           00569         CPFSLT recordTimeL,0
-000304 8A04           00570         BSF flags,5,0
-                      00571         ;BSF LATA,4,0
-000306 0012           00572         RETURN
+                      00559         ; threshold for centre is 450< centre <550
+Warning[207]: Found label after column 1. (middle)
+0002FE                00560         middle
+0002FE 9004           00561         BCF flags,0,0
+                      00562         
+000300 0012           00563         RETURN
+                      00564         
+Warning[207]: Found label after column 1. (CHECK_REC_TIME)
+000302                00565     CHECK_REC_TIME
+                      00566         ;checking if > 60000
+                      00567                 
+                      00568         ;MOVFF readH,LATA
+000302 0EEA           00569         MOVLW HIGH(.60000) ; 11101010
+000304 600D           00570         CPFSLT recordTimeH,0
+000306 EF?? F???      00571         GOTO GT_OR_EQ_60
+00030A 0012           00572         RETURN
                       00573         
+Warning[207]: Found label after column 1. (GT_OR_EQ_60)
+00030C                00574         GT_OR_EQ_60
+                      00575         ;BSF LATA,2,0
+00030C 640D           00576         CPFSGT recordTimeH,0
+00030E EF?? F???      00577         GOTO EQ_60
+000312 8A04           00578         BSF flags,5,0
+000314 0012           00579         RETURN
+                      00580         
+Warning[207]: Found label after column 1. (EQ_60)
+000316                00581         EQ_60
+                      00582         ;BSF LATA,3,0
+000316 0E60           00583         MOVLW LOW(.60000)  ; 01100000
+000318 600C           00584         CPFSLT recordTimeL,0
+00031A 8A04           00585         BSF flags,5,0
+                      00586         ;BSF LATA,4,0
+00031C 0012           00587         RETURN
+                      00588         
 Warning[207]: Found label after column 1. (MAIN)
-000308                00574     MAIN
-000308 EC?? F???      00575         CALL INIT_OSC
-00030C EC?? F???      00576         CALL INIT_PORTS
-000310 EC?? F???      00577         CALL CONVERT_POS_TIME
-000314 EC?? F???      00578         CALL INIT_INTERRUPTS
-000318 EC?? F???      00579         CALL INIT_EUSART
-00031C 8AF2           00580         BSF INTCON, TMR0IE,0
-00031E EC?? F???      00581         CALL DISPLAY_NOTE
-000322 EF?? F???      00582         GOTO MAIN_LOOP
-                      00583         
+00031E                00589     MAIN
+00031E EC?? F???      00590         CALL INIT_OSC
+000322 EC?? F???      00591         CALL INIT_PORTS
+000326 EC?? F???      00592         CALL CONVERT_POS_TIME
+00032A EC?? F???      00593         CALL INIT_INTERRUPTS
+00032E EC?? F???      00594         CALL INIT_EUSART
+000332 8AF2           00595         BSF INTCON, TMR0IE,0
+000334 EC?? F???      00596         CALL DISPLAY_NOTE
+000338 EF?? F???      00597         GOTO MAIN_LOOP
+                      00598         
 Warning[207]: Found label after column 1. (MAIN_LOOP)
-000326                00584     MAIN_LOOP
-                      00585         
-000326 BE04           00586         BTFSC flags,7,0
-000328 EC?? F???      00587         CALL PLAY_RECORDING
-                      00588     
-00032C A604           00589         BTFSS flags,3,0
-00032E EC?? F???      00590         CALL MANUAL_LOOP
-                      00591         
-000332 B604           00592         BTFSC flags,3,0
-000334 EC?? F???      00593         CALL AUTOMATIC_LOOP
-                      00594         
-000338 EF?? F???      00595         GOTO MAIN_LOOP
-                      00596         
-                      00597     
-Warning[207]: Found label after column 1. (AUTOMATIC_LOOP)
-00033C                00598     AUTOMATIC_LOOP
-00033C EC?? F???      00599         CALL ENABLE_INTERRUPTS_EXCEPT_PWM ; re-enable interrupts
+00033C                00599     MAIN_LOOP
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 14
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                       00600         
-                      00601         ; setting the color of the RGB LED
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 14
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-000340 968B           00602         BCF LATC,3,0 
-000342 948B           00603         BCF LATC,2,0
-000344 888B           00604         BSF LATC,4,0
-                      00605         
+00033C BE04           00601         BTFSC flags,7,0
+00033E EC?? F???      00602         CALL PLAY_RECORDING
+                      00603     
+000342 A604           00604         BTFSS flags,3,0
+000344 EC?? F???      00605         CALL MANUAL_LOOP
+                      00606         
+000348 B604           00607         BTFSC flags,3,0
+00034A EC?? F???      00608         CALL AUTOMATIC_LOOP
+                      00609         
+00034E EF?? F???      00610         GOTO MAIN_LOOP
+                      00611         
+                      00612     
+Warning[207]: Found label after column 1. (AUTOMATIC_LOOP)
+000352                00613     AUTOMATIC_LOOP
+000352 EC?? F???      00614         CALL ENABLE_INTERRUPTS_EXCEPT_PWM ; re-enable interrupts
+                      00615         
+                      00616         ; setting the color of the RGB LED
+000356 968B           00617         BCF LATC,3,0 
+000358 948B           00618         BCF LATC,2,0
+00035A 888B           00619         BSF LATC,4,0
+                      00620         
 Warning[207]: Found label after column 1. (WAIT_RX_AUTO)
-000346                00606         WAIT_RX_AUTO
-                      00607             ;CALL CHECK_SERVOS
-                      00608             
-000346 BE04           00609             BTFSC flags,7,0
-000348 EC?? F???      00610             CALL MAIN_LOOP
-00034C A604           00611             BTFSS flags,3,0
-00034E EF?? F???      00612             GOTO MAIN_LOOP
-000352 AA9E           00613             BTFSS PIR1, RCIF, 0
-000354 EF?? F???      00614             GOTO WAIT_RX_AUTO
-000358 CFAE F002      00615         MOVFF RCREG,readL
-                      00616         
-00035C B2AB           00617         BTFSC RCSTA,OERR,0 
-00035E EC?? F???      00618         CALL OVERRUN
-                      00619         
-000362 0E50           00620         MOVLW 'P'
-000364 5C02           00621         SUBWF readL,0
-000366 A4D8           00622         BTFSS STATUS,Z,0
-000368 EF?? F???      00623         GOTO AUTOMATIC_LOOP
-                      00624         
-00036C EC?? F???      00625         CALL DISABLE_INTERRUPTS_EXCEPT_PWM ;disable interrupts
-                      00626         
-000370 0E4B           00627         MOVLW 'K'
-000372 6EAD           00628         MOVWF TXREG,0
-Warning[207]: Found label after column 1. (WAIT_TRANS_AUTO)
-000374                00629         WAIT_TRANS_AUTO
-000374 A2AC           00630             BTFSS TXSTA, 1, 0
-000376 EF?? F???      00631             GOTO WAIT_TRANS_AUTO
-                      00632             
-                      00633         
+00035C                00621         WAIT_RX_AUTO
+                      00622             ;CALL CHECK_SERVOS
+                      00623             
+00035C BE04           00624             BTFSC flags,7,0
+00035E EC?? F???      00625             CALL MAIN_LOOP
+000362 A604           00626             BTFSS flags,3,0
+000364 EF?? F???      00627             GOTO MAIN_LOOP
+000368 AA9E           00628             BTFSS PIR1, RCIF, 0
+00036A EF?? F???      00629             GOTO WAIT_RX_AUTO
+00036E CFAE F002      00630         MOVFF RCREG,readL
+                      00631         
+000372 B2AB           00632         BTFSC RCSTA,OERR,0 
+000374 EC?? F???      00633         CALL OVERRUN
                       00634         
-Warning[207]: Found label after column 1. (WAIT_RX_AUTO_PLAY)
-00037A                00635         WAIT_RX_AUTO_PLAY
-                      00636             ;CALL CHECK_SERVOS
-00037A AA9E           00637             BTFSS PIR1, RCIF, 0
-00037C EF?? F???      00638             GOTO WAIT_RX_AUTO_PLAY
+000378 0E50           00635         MOVLW 'P'
+00037A 5C02           00636         SUBWF readL,0
+00037C A4D8           00637         BTFSS STATUS,Z,0
+00037E EF?? F???      00638         GOTO AUTOMATIC_LOOP
                       00639         
-                      00640         
-000380 CFAE F002      00641         MOVFF RCREG,readL ; contains the letter sent by the java interface
-000384 0E53           00642         MOVLW 'S'
-000386 5C02           00643         SUBWF readL,0
-000388 B4D8           00644         BTFSC STATUS,Z,0
-00038A EF?? F???      00645         GOTO AUTOMATIC_LOOP
-                      00646         
-00038E B2AB           00647         BTFSC RCSTA,OERR,0 
-000390 EC?? F???      00648         CALL OVERRUN
+000382 EC?? F???      00640         CALL DISABLE_INTERRUPTS_EXCEPT_PWM ;disable interrupts
+                      00641         
+000386 0E4B           00642         MOVLW 'K'
+000388 6EAD           00643         MOVWF TXREG,0
+Warning[207]: Found label after column 1. (WAIT_TRANS_AUTO)
+00038A                00644         WAIT_TRANS_AUTO
+00038A A2AC           00645             BTFSS TXSTA, 1, 0
+00038C EF?? F???      00646             GOTO WAIT_TRANS_AUTO
+                      00647             
+                      00648         
                       00649         
-                      00650         
-000394 6A05           00651         CLRF timeNoteL,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 15
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 15
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-000396 6A06           00652         CLRF timeNoteH,0
-000398 EC?? F???      00653         CALL CONVERT_Letter_Pos
+Warning[207]: Found label after column 1. (WAIT_RX_AUTO_PLAY)
+000390                00650         WAIT_RX_AUTO_PLAY
+                      00651             ;CALL CHECK_SERVOS
+000390 AA9E           00652             BTFSS PIR1, RCIF, 0
+000392 EF?? F???      00653             GOTO WAIT_RX_AUTO_PLAY
                       00654         
                       00655         
-00039C EC?? F???      00656         CALL HIT_NOTE
-0003A0 EF?? F???      00657         GOTO WAIT_RX_AUTO_PLAY
-0003A4 0012           00658         RETURN
-                      00659         
-                      00660         
-Warning[207]: Found label after column 1. (MANUAL_LOOP)
-0003A6                00661     MANUAL_LOOP
-                      00662         ; setting the color of the RGB LED
-0003A6 EC?? F???      00663         CALL RECORD_PRESSED
+000396 CFAE F002      00656         MOVFF RCREG,readL ; contains the letter sent by the java interface
+00039A 0E53           00657         MOVLW 'S'
+00039C 5C02           00658         SUBWF readL,0
+00039E B4D8           00659         BTFSC STATUS,Z,0
+0003A0 EF?? F???      00660         GOTO AUTOMATIC_LOOP
+                      00661         
+0003A4 B2AB           00662         BTFSC RCSTA,OERR,0 
+0003A6 EC?? F???      00663         CALL OVERRUN
                       00664         
-                      00665         ;CALL CHECK_SERVOS
-                      00666         
-0003AA B804           00667         BTFSC flags,4,0
-0003AC EC?? F???      00668         CALL CHECK_REC_TIME
-0003B0 BA04           00669         BTFSC flags,5,0 ; checks if 60 seconds have passed since the recording started
-0003B2 EC?? F???      00670         CALL REC_OVER
-                      00671         
-0003B6 B804           00672         BTFSC flags,4,0
-0003B8 EF?? F???      00673         GOTO REC_LEDS
-0003BC 948B           00674         BCF LATC,2,0
-0003BE 868B           00675         BSF LATC,3,0
-0003C0 988B           00676         BCF LATC,4,0
-0003C2 EF?? F???      00677         GOTO SELECT_MODE
-                      00678         
-Warning[207]: Found label after column 1. (REC_LEDS)
-0003C6                00679         REC_LEDS
-0003C6 848B           00680         BSF LATC,2,0
-0003C8 968B           00681         BCF LATC,3,0
-0003CA 988B           00682         BCF LATC,4,0
-Warning[207]: Found label after column 1. (SELECT_MODE)
-0003CC                00683         SELECT_MODE
-0003CC A204           00684         BTFSS flags,1,0
-0003CE EC?? F???      00685         CALL MANUAL_JOYSTICK
+                      00665         
+0003AA 6A05           00666         CLRF timeNoteL,0
+0003AC 6A06           00667         CLRF timeNoteH,0
+0003AE EC?? F???      00668         CALL CONVERT_Letter_Pos
+                      00669         
+                      00670         
+0003B2 EC?? F???      00671         CALL HIT_NOTE
+0003B6 EF?? F???      00672         GOTO WAIT_RX_AUTO_PLAY
+0003BA 0012           00673         RETURN
+                      00674         
+                      00675         
+Warning[207]: Found label after column 1. (MANUAL_LOOP)
+0003BC                00676     MANUAL_LOOP
+                      00677         ; setting the color of the RGB LED
+0003BC EC?? F???      00678         CALL RECORD_PRESSED
+                      00679         
+                      00680         ;CALL CHECK_SERVOS
+                      00681         
+0003C0 B804           00682         BTFSC flags,4,0
+0003C2 EC?? F???      00683         CALL CHECK_REC_TIME
+0003C6 BA04           00684         BTFSC flags,5,0 ; checks if 60 seconds have passed since the recording started
+0003C8 EC?? F???      00685         CALL REC_OVER
                       00686         
-0003D2 B204           00687         BTFSC flags,1,0
-0003D4 EC?? F???      00688         CALL MANUAL_JAVA
-                      00689         
-0003D8 0012           00690         RETURN
-                      00691         
+0003CC B804           00687         BTFSC flags,4,0
+0003CE EF?? F???      00688         GOTO REC_LEDS
+0003D2 948B           00689         BCF LATC,2,0
+0003D4 868B           00690         BSF LATC,3,0
+0003D6 988B           00691         BCF LATC,4,0
+0003D8 EF?? F???      00692         GOTO SELECT_MODE
+                      00693         
+Warning[207]: Found label after column 1. (REC_LEDS)
+0003DC                00694         REC_LEDS
+0003DC 848B           00695         BSF LATC,2,0
+0003DE 968B           00696         BCF LATC,3,0
+0003E0 988B           00697         BCF LATC,4,0
+Warning[207]: Found label after column 1. (SELECT_MODE)
+0003E2                00698         SELECT_MODE
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 16
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0003E2 A204           00699         BTFSS flags,1,0
+0003E4 EC?? F???      00700         CALL MANUAL_JOYSTICK
+                      00701         
+0003E8 B204           00702         BTFSC flags,1,0
+0003EA EC?? F???      00703         CALL MANUAL_JAVA
+                      00704         
+0003EE 0012           00705         RETURN
+                      00706         
 Warning[207]: Found label after column 1. (MANUAL_JOYSTICK)
-0003DA                00692     MANUAL_JOYSTICK
-0003DA 9A8B           00693         BCF LATC,5,0
-                      00694         
-                      00695         
-0003DC B681           00696         BTFSC PORTB,3,0
-0003DE EF?? F???      00697         GOTO HIT_NOT_PRESSED
-                      00698         
-0003E2 EC?? F???      00699         CALL DEBOUNCE_LOOP
-0003E6 B681           00700         BTFSC PORTB,3,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not retu
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 16
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                            rn
-0003E8 EF?? F???      00701         GOTO HIT_NOT_PRESSED ; if not we havent been pressed
-                      00702         
-0003EC B404           00703         BTFSC flags,2,0
-0003EE EF?? F???      00704         GOTO NO_HIT
-                      00705         
-0003F2 EC?? F???      00706         CALL HIT_NOTE
-0003F6 8404           00707         BSF flags,2,0
-0003F8 EF?? F???      00708         GOTO NO_HIT
+0003F0                00707     MANUAL_JOYSTICK
+0003F0 9A8B           00708         BCF LATC,5,0
                       00709         
-Warning[207]: Found label after column 1. (HIT_NOT_PRESSED)
-0003FC                00710         HIT_NOT_PRESSED
-0003FC 9404           00711         BCF flags,2,0
-Warning[207]: Found label after column 1. (NO_HIT)
-0003FE                00712         NO_HIT
+                      00710         
+0003F2 B681           00711         BTFSC PORTB,3,0
+0003F4 EF?? F???      00712         GOTO HIT_NOT_PRESSED
                       00713         
-0003FE 82C2           00714         BSF ADCON0,1,0 ;convert
-Warning[207]: Found label after column 1. (JOYSTICK_INTERNAL_LOOP)
-000400                00715         JOYSTICK_INTERNAL_LOOP
-000400 B2C2           00716         BTFSC ADCON0,1,0
-000402 EF?? F???      00717         GOTO JOYSTICK_INTERNAL_LOOP
-                      00718         
-000406 EC?? F???      00719         CALL READ_VALUE
-00040A EC?? F???      00720         CALL CHECK_CENTRE
-                      00721         
-00040E A004           00722         BTFSS flags,0,0
-000410 EC?? F???      00723         CALL CHECK_LEFT
+0003F8 EC?? F???      00714         CALL DEBOUNCE_LOOP
+0003FC B681           00715         BTFSC PORTB,3,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not retu
+                            rn
+0003FE EF?? F???      00716         GOTO HIT_NOT_PRESSED ; if not we havent been pressed
+                      00717         
+000402 B404           00718         BTFSC flags,2,0
+000404 EF?? F???      00719         GOTO NO_HIT
+                      00720         
+000408 EC?? F???      00721         CALL HIT_NOTE
+00040C 8404           00722         BSF flags,2,0
+00040E EF?? F???      00723         GOTO NO_HIT
                       00724         
-000414 A004           00725         BTFSS flags,0,0
-000416 EC?? F???      00726         CALL CHECK_RIGHT
-                      00727         
+Warning[207]: Found label after column 1. (HIT_NOT_PRESSED)
+000412                00725         HIT_NOT_PRESSED
+000412 9404           00726         BCF flags,2,0
+Warning[207]: Found label after column 1. (NO_HIT)
+000414                00727         NO_HIT
                       00728         
-00041A 0012           00729         RETURN
-                      00730         
-                      00731         
-                      00732         
+000414 82C2           00729         BSF ADCON0,1,0 ;convert
+Warning[207]: Found label after column 1. (JOYSTICK_INTERNAL_LOOP)
+000416                00730         JOYSTICK_INTERNAL_LOOP
+000416 B2C2           00731         BTFSC ADCON0,1,0
+000418 EF?? F???      00732         GOTO JOYSTICK_INTERNAL_LOOP
+                      00733         
+00041C EC?? F???      00734         CALL READ_VALUE
+000420 EC?? F???      00735         CALL CHECK_CENTRE
+                      00736         
+000424 A004           00737         BTFSS flags,0,0
+000426 EC?? F???      00738         CALL CHECK_LEFT
+                      00739         
+00042A A004           00740         BTFSS flags,0,0
+00042C EC?? F???      00741         CALL CHECK_RIGHT
+                      00742         
+                      00743         
+000430 0012           00744         RETURN
+                      00745         
+                      00746         
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 17
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00747         
 Warning[207]: Found label after column 1. (MANUAL_JAVA)
-00041C                00733      MANUAL_JAVA
-00041C 8A8B           00734         BSF LATC,5,0
+000432                00748      MANUAL_JAVA
+000432 8A8B           00749         BSF LATC,5,0
 Warning[207]: Found label after column 1. (WAIT_RX)
-00041E                00735         WAIT_RX
-                      00736             
-00041E EC?? F???      00737             CALL RECORD_PRESSED
-                      00738             
-000422 BE04           00739             BTFSC flags,7,0
-000424 EC?? F???      00740             CALL MAIN_LOOP
-                      00741             
-000428 B804           00742             BTFSC flags,4,0 ;
-00042A EC?? F???      00743             CALL CHECK_REC_TIME
-00042E BA04           00744             BTFSC flags,5,0 ; checks if 60 seconds have passed since the recording started
-000430 EC?? F???      00745             CALL REC_OVER
-                      00746             
-000434 B604           00747             BTFSC flags,3,0 ; checks if mode has changed to automatic
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 17
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-000436 EF?? F???      00748             GOTO MAIN_LOOP
-                      00749             
-00043A A204           00750             BTFSS flags,1,0 ; checks if manual mode has changed to joystick
-00043C EF?? F???      00751             GOTO MANUAL_LOOP
-                      00752             
-000440 AA9E           00753             BTFSS PIR1, RCIF, 0
-000442 EF?? F???      00754             GOTO WAIT_RX
-                      00755         
-                      00756         
-000446 CFAE F002      00757         MOVFF RCREG,readL ; contains the letter sent by the java interface
-                      00758         ;MOVFF readL,LATD
-                      00759         
-00044A B2AB           00760         BTFSC RCSTA,OERR,0 
-00044C EC?? F???      00761         CALL OVERRUN
-                      00762         
-000450 C002 FF89      00763         MOVFF readL,LATA
-                      00764         ;CLRF timeNoteL,0
-                      00765         ;CLRF timeNoteH,0
-000454 EC?? F???      00766         CALL CONVERT_Letter_Pos
-000458 EC?? F???      00767         CALL CONVERT_POS_TIME
-                      00768         
-                      00769         
+000434                00750         WAIT_RX
+                      00751             
+000434 EC?? F???      00752             CALL RECORD_PRESSED
+                      00753             
+000438 BE04           00754             BTFSC flags,7,0
+00043A EC?? F???      00755             CALL MAIN_LOOP
+                      00756             
+00043E B804           00757             BTFSC flags,4,0 ;
+000440 EC?? F???      00758             CALL CHECK_REC_TIME
+000444 BA04           00759             BTFSC flags,5,0 ; checks if 60 seconds have passed since the recording started
+000446 EC?? F???      00760             CALL REC_OVER
+                      00761             
+00044A B604           00762             BTFSC flags,3,0 ; checks if mode has changed to automatic
+00044C EF?? F???      00763             GOTO MAIN_LOOP
+                      00764             
+000450 A204           00765             BTFSS flags,1,0 ; checks if manual mode has changed to joystick
+000452 EF?? F???      00766             GOTO MANUAL_LOOP
+                      00767             
+000456 AA9E           00768             BTFSS PIR1, RCIF, 0
+000458 EF?? F???      00769             GOTO WAIT_RX
                       00770         
-00045C EC?? F???      00771         CALL HIT_NOTE
-                      00772         
-000460 0012           00773         RETURN
+                      00771         
+00045C CFAE F002      00772         MOVFF RCREG,readL ; contains the letter sent by the java interface
+                      00773         ;MOVFF readL,LATD
                       00774         
-Warning[207]: Found label after column 1. (OVERRUN)
-000462                00775     OVERRUN
-000462 98AB           00776         BCF RCSTA,CREN,0
-000464 8004           00777         BSF CREN,0
-000466 0012           00778         RETURN
-                      00779 
-Warning[207]: Found label after column 1. (HIT_NOTE)
-000468                00780     HIT_NOTE
-                      00781         
-000468 EC?? F???      00782         CALL DISPLAY_NOTE
-00046C B804           00783         BTFSC flags,4,0
-00046E EC?? F???      00784         CALL SAVE_NOTE
-                      00785         ;BTFSC flags,4,0
-                      00786         
+000460 B2AB           00775         BTFSC RCSTA,OERR,0 
+000462 EC?? F???      00776         CALL OVERRUN
+                      00777         
+000466 C002 FF89      00778         MOVFF readL,LATA
+                      00779         ;CLRF timeNoteL,0
+                      00780         ;CLRF timeNoteH,0
+00046A EC?? F???      00781         CALL CONVERT_Letter_Pos
+00046E EC?? F???      00782         CALL CONVERT_POS_TIME
+                      00783         
+                      00784         
+                      00785         
+000472 EC?? F???      00786         CALL HIT_NOTE
                       00787         
-                      00788         
-000472 8009           00789         BSF servoFlags,0,0
-                      00790         
-000474 B804           00791         BTFSC flags,4,0
-                      00792         
-000476 6A0C           00793         CLRF recordTimeL,0
-000478 6A0D           00794         CLRF recordTimeH,0
-                      00795         
+000476 0012           00788         RETURN
+                      00789         
+Warning[207]: Found label after column 1. (OVERRUN)
+000478                00790     OVERRUN
+000478 98AB           00791         BCF RCSTA,CREN,0
+00047A 8004           00792         BSF CREN,0
+00047C 0012           00793         RETURN
+                      00794 
+Warning[207]: Found label after column 1. (HIT_NOTE)
+00047E                00795     HIT_NOTE
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 18
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                       00796         
-00047A 0012           00797         RETURN
-                      00798         
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 18
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-Warning[207]: Found label after column 1. (REC_OVER)
-00047C                00799     REC_OVER
-                      00800     
-00047C BC04           00801         BTFSC flags,6,0
-00047E EC?? F???      00802         CALL SEND_STOP_JAVA
-000482 9C04           00803         BCF flags,6,0
-                      00804         
-000484 0E80           00805         MOVLW b'10000000'
-000486 6EEF           00806         MOVWF INDF0,0
+00047E EC?? F???      00797         CALL DISPLAY_NOTE
+000482 B804           00798         BTFSC flags,4,0
+000484 EC?? F???      00799         CALL SAVE_NOTE
+                      00800         ;BTFSC flags,4,0
+                      00801         
+                      00802         
+                      00803         
+000488 8009           00804         BSF servoFlags,0,0
+                      00805         
+00048A B804           00806         BTFSC flags,4,0
                       00807         
-                      00808         
-000488 9804           00809         BCF flags,4,0
-00048A 9A04           00810         BCF flags,5,0
-                      00811         ;BSF LATD,7,0
-                      00812         
-00048C 948B           00813         BCF LATC,2,0
-00048E 868B           00814         BSF LATC,3,0
-000490 988B           00815         BCF LATC,4,0
-                      00816         
-000492 EE00 F040      00817         LFSR 0, Position_RAM_Notes
-000496 EE10 F080      00818         LFSR 1, Position_RAM_Delay_L
-00049A EE20 F0C0      00819         LFSR 2, Position_RAM_Delay_H
-                      00820         
-                      00821         
-Warning[207]: Found label after column 1. (SEND_STOP_JAVA)
-00049E                00822     SEND_STOP_JAVA
-                      00823         ;BSF LATD,7,0
-00049E 0E53           00824         MOVLW 'S'
-0004A0 6EAD           00825         MOVWF TXREG,0
-Warning[207]: Found label after column 1. (WAIT_TRANS_STOP_REC)
-0004A2                00826         WAIT_TRANS_STOP_REC
-0004A2 A2AC           00827             BTFSS TXSTA, 1, 0
-0004A4 EF?? F???      00828             GOTO WAIT_TRANS_STOP_REC
-0004A8 9C04           00829         BCF flags,6,0
-0004AA 0012           00830         RETURN
+00048C 6A0C           00808         CLRF recordTimeL,0
+00048E 6A0D           00809         CLRF recordTimeH,0
+                      00810         
+                      00811         
+000490 0012           00812         RETURN
+                      00813         
+Warning[207]: Found label after column 1. (REC_OVER)
+000492                00814     REC_OVER
+                      00815     
+000492 BC04           00816         BTFSC flags,6,0
+000494 EC?? F???      00817         CALL SEND_STOP_JAVA
+000498 9C04           00818         BCF flags,6,0
+                      00819         
+00049A 0E80           00820         MOVLW b'10000000'
+00049C 6EEF           00821         MOVWF INDF0,0
+                      00822         
+                      00823         
+00049E 9804           00824         BCF flags,4,0
+0004A0 9A04           00825         BCF flags,5,0
+                      00826         ;BSF LATD,7,0
+                      00827         
+0004A2 948B           00828         BCF LATC,2,0
+0004A4 868B           00829         BSF LATC,3,0
+0004A6 988B           00830         BCF LATC,4,0
                       00831         
-Warning[207]: Found label after column 1. (SAVE_NOTE)
-0004AC                00832     SAVE_NOTE
-                      00833         
-0004AC EC?? F???      00834         CALL DISABLE_INTERRUPTS_EXCEPT_PWM ; disable interrupts
-                      00835         ;MOVLW 0x001
-                      00836         ;MOVWF BSR,0  ; selecting bank 1 of the ram
-                      00837         
-0004B0 C003 FFEF      00838         MOVFF position,INDF0
-                      00839         
-                      00840         
-0004B4 C00C FFE7      00841         MOVFF recordTimeL,INDF1
-                      00842         
-                      00843         
-0004B8 C00D FFDF      00844         MOVFF recordTimeH,INDF2
-                      00845         
+0004A8 EE00 F040      00832         LFSR 0, Position_RAM_Notes
+0004AC EE10 F080      00833         LFSR 1, Position_RAM_Delay_L
+0004B0 EE20 F0C0      00834         LFSR 2, Position_RAM_Delay_H
+                      00835         
+                      00836         
+Warning[207]: Found label after column 1. (SEND_STOP_JAVA)
+0004B4                00837     SEND_STOP_JAVA
+                      00838         ;BSF LATD,7,0
+0004B4 0E53           00839         MOVLW 'S'
+0004B6 6EAD           00840         MOVWF TXREG,0
+Warning[207]: Found label after column 1. (WAIT_TRANS_STOP_REC)
+0004B8                00841         WAIT_TRANS_STOP_REC
+0004B8 A2AC           00842             BTFSS TXSTA, 1, 0
+0004BA EF?? F???      00843             GOTO WAIT_TRANS_STOP_REC
+0004BE 9C04           00844         BCF flags,6,0
+0004C0 0012           00845         RETURN
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 19
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                       00846         
-0004BC 2AE9           00847         INCF FSR0L,1
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 19
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0004BE 2AE1           00848         INCF FSR1L,1
-0004C0 2AD9           00849         INCF FSR2L,1
-                      00850         
-0004C2 BC04           00851         BTFSC flags,6,0
-0004C4 EC?? F???      00852         CALL SEND_NOTE    
-                      00853             
-0004C8 6A0D           00854         CLRF recordTimeH,0
-0004CA 6A0C           00855         CLRF recordTimeL,0
-0004CC EC?? F???      00856         CALL ENABLE_INTERRUPTS_EXCEPT_PWM ; re-enable interrupts
-0004D0 0012           00857         RETURN
+Warning[207]: Found label after column 1. (SAVE_NOTE)
+0004C2                00847     SAVE_NOTE
+                      00848         
+0004C2 EC?? F???      00849         CALL DISABLE_INTERRUPTS_EXCEPT_PWM ; disable interrupts
+                      00850         ;MOVLW 0x001
+                      00851         ;MOVWF BSR,0  ; selecting bank 1 of the ram
+                      00852         
+0004C6 C003 FFEF      00853         MOVFF position,INDF0
+                      00854         
+                      00855         
+0004CA C00C FFE7      00856         MOVFF recordTimeL,INDF1
+                      00857         
                       00858         
+0004CE C00D FFDF      00859         MOVFF recordTimeH,INDF2
+                      00860         
+                      00861         
+0004D2 2AE9           00862         INCF FSR0L,1
+0004D4 2AE1           00863         INCF FSR1L,1
+0004D6 2AD9           00864         INCF FSR2L,1
+                      00865         
+0004D8 BC04           00866         BTFSC flags,6,0
+0004DA EC?? F???      00867         CALL SEND_NOTE    
+                      00868             
+0004DE 6A0D           00869         CLRF recordTimeH,0
+0004E0 6A0C           00870         CLRF recordTimeL,0
+0004E2 EC?? F???      00871         CALL ENABLE_INTERRUPTS_EXCEPT_PWM ; re-enable interrupts
+0004E6 0012           00872         RETURN
+                      00873         
 Warning[207]: Found label after column 1. (SEND_NOTE)
-0004D2                00859     SEND_NOTE
-                      00860         ;BTG LATD,7,0
-0004D2 EC?? F???      00861         CALL CONVERT_POS_TIME
-0004D6 C00E FF89      00862         MOVFF noteLetter,LATA
-0004DA C00E FFAD      00863         MOVFF noteLetter,TXREG
-                      00864         
-0004DE 9AF2           00865         BCF INTCON, TMR0IE,0
+0004E8                00874     SEND_NOTE
+                      00875         ;BTG LATD,7,0
+0004E8 EC?? F???      00876         CALL CONVERT_POS_TIME
+0004EC C00E FF89      00877         MOVFF noteLetter,LATA
+0004F0 C00E FFAD      00878         MOVFF noteLetter,TXREG
+                      00879         
+0004F4 9AF2           00880         BCF INTCON, TMR0IE,0
 Warning[207]: Found label after column 1. (WAIT_TRANS_NOTE_LETTER)
-0004E0                00866         WAIT_TRANS_NOTE_LETTER
-                      00867             
-0004E0 A2AC           00868             BTFSS TXSTA, 1, 0
-0004E2 EF?? F???      00869             GOTO WAIT_TRANS_NOTE_LETTER
-                      00870         
-0004E6 8AF2           00871         BSF INTCON, TMR0IE,0    
-                      00872         
-                      00873         ;MOVFF recordTimeL,LATA
-0004E8 C00C FFAD      00874         MOVFF recordTimeL, TXREG
-0004EC 9AF2           00875         BCF INTCON, TMR0IE,0
+0004F6                00881         WAIT_TRANS_NOTE_LETTER
+                      00882             
+0004F6 A2AC           00883             BTFSS TXSTA, 1, 0
+0004F8 EF?? F???      00884             GOTO WAIT_TRANS_NOTE_LETTER
+                      00885         
+0004FC 8AF2           00886         BSF INTCON, TMR0IE,0    
+                      00887         
+                      00888         ;MOVFF recordTimeL,LATA
+0004FE C00C FFAD      00889         MOVFF recordTimeL, TXREG
+000502 9AF2           00890         BCF INTCON, TMR0IE,0
 Warning[207]: Found label after column 1. (WAIT_TRANS_DELAY_L)
-0004EE                00876         WAIT_TRANS_DELAY_L
-0004EE A2AC           00877             BTFSS TXSTA, 1, 0
-0004F0 EF?? F???      00878             GOTO WAIT_TRANS_DELAY_L
-0004F4 8AF2           00879         BSF INTCON, TMR0IE,0   
-                      00880         
-                      00881         ;MOVFF recordTimeH,LATA    
-0004F6 C00D FFAD      00882         MOVFF recordTimeH, TXREG
-0004FA 9AF2           00883         BCF INTCON, TMR0IE,0
-Warning[207]: Found label after column 1. (WAIT_TRANS_DELAY_H)
-0004FC                00884         WAIT_TRANS_DELAY_H
-0004FC A2AC           00885             BTFSS TXSTA, 1, 0
-0004FE EF?? F???      00886             GOTO WAIT_TRANS_DELAY_H
-000502 8AF2           00887         BSF INTCON, TMR0IE,0     
-000504 0012           00888         RETURN
-                      00889         
-Warning[207]: Found label after column 1. (CONVERT_POS_TIME)
-000506                00890     CONVERT_POS_TIME
-000506 0E00           00891         MOVLW .0
-000508 5C03           00892         SUBWF position,0
-00050A B4D8           00893         BTFSC STATUS,Z,0
-00050C EC?? F???      00894         CALL SET_NOTE_C
+000504                00891         WAIT_TRANS_DELAY_L
+000504 A2AC           00892             BTFSS TXSTA, 1, 0
+000506 EF?? F???      00893             GOTO WAIT_TRANS_DELAY_L
+00050A 8AF2           00894         BSF INTCON, TMR0IE,0   
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 20
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                       00895         
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 20
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-000510 0E01           00896         MOVLW .1
-000512 5C03           00897         SUBWF position,0
-000514 B4D8           00898         BTFSC STATUS,Z,0
-000516 EC?? F???      00899         CALL SET_NOTE_D
-                      00900         
-00051A 0E02           00901         MOVLW .2
-00051C 5C03           00902         SUBWF position,0
-00051E B4D8           00903         BTFSC STATUS,Z,0
-000520 EC?? F???      00904         CALL SET_NOTE_E
-                      00905         
-000524 0E03           00906         MOVLW .3
-000526 5C03           00907         SUBWF position,0
-000528 B4D8           00908         BTFSC STATUS,Z,0
-00052A EC?? F???      00909         CALL SET_NOTE_F
+                      00896         ;MOVFF recordTimeH,LATA    
+00050C C00D FFAD      00897         MOVFF recordTimeH, TXREG
+000510 9AF2           00898         BCF INTCON, TMR0IE,0
+Warning[207]: Found label after column 1. (WAIT_TRANS_DELAY_H)
+000512                00899         WAIT_TRANS_DELAY_H
+000512 A2AC           00900             BTFSS TXSTA, 1, 0
+000514 EF?? F???      00901             GOTO WAIT_TRANS_DELAY_H
+000518 8AF2           00902         BSF INTCON, TMR0IE,0     
+00051A 0012           00903         RETURN
+                      00904         
+Warning[207]: Found label after column 1. (CONVERT_POS_TIME)
+00051C                00905     CONVERT_POS_TIME
+00051C 0E00           00906         MOVLW .0
+00051E 5C03           00907         SUBWF position,0
+000520 B4D8           00908         BTFSC STATUS,Z,0
+000522 EC?? F???      00909         CALL SET_NOTE_C
                       00910         
-00052E 0E04           00911         MOVLW .4
-000530 5C03           00912         SUBWF position,0
-000532 B4D8           00913         BTFSC STATUS,Z,0
-000534 EC?? F???      00914         CALL SET_NOTE_G
+000526 0E01           00911         MOVLW .1
+000528 5C03           00912         SUBWF position,0
+00052A B4D8           00913         BTFSC STATUS,Z,0
+00052C EC?? F???      00914         CALL SET_NOTE_D
                       00915         
-000538 0E05           00916         MOVLW .5
-00053A 5C03           00917         SUBWF position,0
-00053C B4D8           00918         BTFSC STATUS,Z,0
-00053E EC?? F???      00919         CALL SET_NOTE_A
+000530 0E02           00916         MOVLW .2
+000532 5C03           00917         SUBWF position,0
+000534 B4D8           00918         BTFSC STATUS,Z,0
+000536 EC?? F???      00919         CALL SET_NOTE_E
                       00920         
-000542 0E06           00921         MOVLW .6
-000544 5C03           00922         SUBWF position,0
-000546 B4D8           00923         BTFSC STATUS,Z,0
-000548 EC?? F???      00924         CALL SET_NOTE_B
+00053A 0E03           00921         MOVLW .3
+00053C 5C03           00922         SUBWF position,0
+00053E B4D8           00923         BTFSC STATUS,Z,0
+000540 EC?? F???      00924         CALL SET_NOTE_F
                       00925         
-00054C 0E07           00926         MOVLW .7
-00054E 5C03           00927         SUBWF position,0
-000550 B4D8           00928         BTFSC STATUS,Z,0
-000552 EC?? F???      00929         CALL SET_NOTE_C2
-000556 0012           00930         RETURN
-                      00931         
+000544 0E04           00926         MOVLW .4
+000546 5C03           00927         SUBWF position,0
+000548 B4D8           00928         BTFSC STATUS,Z,0
+00054A EC?? F???      00929         CALL SET_NOTE_G
+                      00930         
+00054E 0E05           00931         MOVLW .5
+000550 5C03           00932         SUBWF position,0
+000552 B4D8           00933         BTFSC STATUS,Z,0
+000554 EC?? F???      00934         CALL SET_NOTE_A
+                      00935         
+000558 0E06           00936         MOVLW .6
+00055A 5C03           00937         SUBWF position,0
+00055C B4D8           00938         BTFSC STATUS,Z,0
+00055E EC?? F???      00939         CALL SET_NOTE_B
+                      00940         
+000562 0E07           00941         MOVLW .7
+000564 5C03           00942         SUBWF position,0
+000566 B4D8           00943         BTFSC STATUS,Z,0
+000568 EC?? F???      00944         CALL SET_NOTE_C2
+00056C 0012           00945         RETURN
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 21
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00946         
 Warning[207]: Found label after column 1. (CONVERT_Letter_Pos)
-000558                00932     CONVERT_Letter_Pos
-000558 0E43           00933         MOVLW 'C'       ; proteus reads the eusart input as b'1111111' or .255
-00055A 5C02           00934         SUBWF readL,0
-00055C B4D8           00935         BTFSC STATUS,Z,0
-00055E EC?? F???      00936         CALL SET_NOTE_C
-                      00937         
-000562 0E44           00938         MOVLW 'D'
-000564 5C02           00939         SUBWF readL,0
-000566 B4D8           00940         BTFSC STATUS,Z,0
-000568 EC?? F???      00941         CALL SET_NOTE_D
-                      00942         
-00056C 0E45           00943         MOVLW 'E'
-00056E 5C02           00944         SUBWF readL,0
-000570 B4D8           00945         BTFSC STATUS,Z,0
-000572 EC?? F???      00946         CALL SET_NOTE_E
-                      00947         
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 21
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-000576 0E46           00948         MOVLW 'F'
-000578 5C02           00949         SUBWF readL,0
-00057A B4D8           00950         BTFSC STATUS,Z,0
-00057C EC?? F???      00951         CALL SET_NOTE_F
+00056E                00947     CONVERT_Letter_Pos
+00056E 0E43           00948         MOVLW 'C'       ; proteus reads the eusart input as b'1111111' or .255
+000570 5C02           00949         SUBWF readL,0
+000572 B4D8           00950         BTFSC STATUS,Z,0
+000574 EC?? F???      00951         CALL SET_NOTE_C
                       00952         
-000580 0E47           00953         MOVLW 'G'
-000582 5C02           00954         SUBWF readL,0
-000584 B4D8           00955         BTFSC STATUS,Z,0
-000586 EC?? F???      00956         CALL SET_NOTE_G
+000578 0E44           00953         MOVLW 'D'
+00057A 5C02           00954         SUBWF readL,0
+00057C B4D8           00955         BTFSC STATUS,Z,0
+00057E EC?? F???      00956         CALL SET_NOTE_D
                       00957         
-00058A 0E41           00958         MOVLW 'A'
-00058C 5C02           00959         SUBWF readL,0
-00058E B4D8           00960         BTFSC STATUS,Z,0
-000590 EC?? F???      00961         CALL SET_NOTE_A
+000582 0E45           00958         MOVLW 'E'
+000584 5C02           00959         SUBWF readL,0
+000586 B4D8           00960         BTFSC STATUS,Z,0
+000588 EC?? F???      00961         CALL SET_NOTE_E
                       00962         
-000594 0E42           00963         MOVLW 'B'
-000596 5C02           00964         SUBWF readL,0
-000598 B4D8           00965         BTFSC STATUS,Z,0
-00059A EC?? F???      00966         CALL SET_NOTE_B
+00058C 0E46           00963         MOVLW 'F'
+00058E 5C02           00964         SUBWF readL,0
+000590 B4D8           00965         BTFSC STATUS,Z,0
+000592 EC?? F???      00966         CALL SET_NOTE_F
                       00967         
-00059E 0E63           00968         MOVLW 'c'
-0005A0 5C02           00969         SUBWF readL,0
-0005A2 B4D8           00970         BTFSC STATUS,Z,0
-0005A4 EC?? F???      00971         CALL SET_NOTE_C2
-0005A8 0012           00972         RETURN
-                      00973         
+000596 0E47           00968         MOVLW 'G'
+000598 5C02           00969         SUBWF readL,0
+00059A B4D8           00970         BTFSC STATUS,Z,0
+00059C EC?? F???      00971         CALL SET_NOTE_G
+                      00972         
+0005A0 0E41           00973         MOVLW 'A'
+0005A2 5C02           00974         SUBWF readL,0
+0005A4 B4D8           00975         BTFSC STATUS,Z,0
+0005A6 EC?? F???      00976         CALL SET_NOTE_A
+                      00977         
+0005AA 0E42           00978         MOVLW 'B'
+0005AC 5C02           00979         SUBWF readL,0
+0005AE B4D8           00980         BTFSC STATUS,Z,0
+0005B0 EC?? F???      00981         CALL SET_NOTE_B
+                      00982         
+0005B4 0E63           00983         MOVLW 'c'
+0005B6 5C02           00984         SUBWF readL,0
+0005B8 B4D8           00985         BTFSC STATUS,Z,0
+0005BA EC?? F???      00986         CALL SET_NOTE_C2
+0005BE 0012           00987         RETURN
+                      00988         
 Warning[207]: Found label after column 1. (SET_NOTE_C)
-0005AA                00974     SET_NOTE_C
-0005AA 0E43           00975         MOVLW 'C'
-0005AC 6E0E           00976         MOVWF noteLetter,0
-0005AE 0E00           00977         MOVLW .0
-0005B0 6E03           00978         MOVWF position,0
-0005B2 0012           00979         RETURN
-                      00980         
+0005C0                00989     SET_NOTE_C
+0005C0 0E43           00990         MOVLW 'C'
+0005C2 6E0E           00991         MOVWF noteLetter,0
+0005C4 0E00           00992         MOVLW .0
+0005C6 6E03           00993         MOVWF position,0
+0005C8 0012           00994         RETURN
+                      00995         
 Warning[207]: Found label after column 1. (SET_NOTE_D)
-0005B4                00981     SET_NOTE_D
-0005B4 0E44           00982         MOVLW 'D'
-0005B6 6E0E           00983         MOVWF noteLetter,0
-0005B8 0E01           00984         MOVLW .1
-0005BA 6E03           00985         MOVWF position,0
-0005BC 0012           00986         RETURN
-Warning[207]: Found label after column 1. (SET_NOTE_E)
-0005BE                00987     SET_NOTE_E
-0005BE 0E45           00988         MOVLW 'E'
-0005C0 6E0E           00989         MOVWF noteLetter,0
-0005C2 0E02           00990         MOVLW .2
-0005C4 6E03           00991         MOVWF position,0
-0005C6 0012           00992         RETURN
-                      00993         
-Warning[207]: Found label after column 1. (SET_NOTE_F)
-0005C8                00994     SET_NOTE_F
-0005C8 0E46           00995         MOVLW 'F'
-0005CA 6E0E           00996         MOVWF noteLetter,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 22
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 22
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0005CC 0E03           00997         MOVLW .3
-0005CE 6E03           00998         MOVWF position,0
-0005D0 0012           00999         RETURN
+0005CA                00996     SET_NOTE_D
+0005CA 0E44           00997         MOVLW 'D'
+0005CC 6E0E           00998         MOVWF noteLetter,0
+0005CE 0E01           00999         MOVLW .1
+0005D0 6E03           01000         MOVWF position,0
+0005D2 0012           01001         RETURN
+Warning[207]: Found label after column 1. (SET_NOTE_E)
+0005D4                01002     SET_NOTE_E
+0005D4 0E45           01003         MOVLW 'E'
+0005D6 6E0E           01004         MOVWF noteLetter,0
+0005D8 0E02           01005         MOVLW .2
+0005DA 6E03           01006         MOVWF position,0
+0005DC 0012           01007         RETURN
+                      01008         
+Warning[207]: Found label after column 1. (SET_NOTE_F)
+0005DE                01009     SET_NOTE_F
+0005DE 0E46           01010         MOVLW 'F'
+0005E0 6E0E           01011         MOVWF noteLetter,0
+0005E2 0E03           01012         MOVLW .3
+0005E4 6E03           01013         MOVWF position,0
+0005E6 0012           01014         RETURN
 Warning[207]: Found label after column 1. (SET_NOTE_G)
-0005D2                01000     SET_NOTE_G
-0005D2 0E47           01001         MOVLW 'G'
-0005D4 6E0E           01002         MOVWF noteLetter,0
-0005D6 0E04           01003         MOVLW .4
-0005D8 6E03           01004         MOVWF position,0
-0005DA 0012           01005         RETURN
+0005E8                01015     SET_NOTE_G
+0005E8 0E47           01016         MOVLW 'G'
+0005EA 6E0E           01017         MOVWF noteLetter,0
+0005EC 0E04           01018         MOVLW .4
+0005EE 6E03           01019         MOVWF position,0
+0005F0 0012           01020         RETURN
 Warning[207]: Found label after column 1. (SET_NOTE_A)
-0005DC                01006     SET_NOTE_A
-0005DC 0E41           01007         MOVLW 'A'
-0005DE 6E0E           01008         MOVWF noteLetter,0
-0005E0 0E05           01009         MOVLW .5
-0005E2 6E03           01010         MOVWF position,0
-0005E4 0012           01011         RETURN
+0005F2                01021     SET_NOTE_A
+0005F2 0E41           01022         MOVLW 'A'
+0005F4 6E0E           01023         MOVWF noteLetter,0
+0005F6 0E05           01024         MOVLW .5
+0005F8 6E03           01025         MOVWF position,0
+0005FA 0012           01026         RETURN
 Warning[207]: Found label after column 1. (SET_NOTE_B)
-0005E6                01012     SET_NOTE_B
-0005E6 0E42           01013         MOVLW 'B'
-0005E8 6E0E           01014         MOVWF noteLetter,0
-0005EA 0E06           01015         MOVLW .6
-0005EC 6E03           01016         MOVWF position,0
-0005EE 0012           01017         RETURN
-                      01018         
+0005FC                01027     SET_NOTE_B
+0005FC 0E42           01028         MOVLW 'B'
+0005FE 6E0E           01029         MOVWF noteLetter,0
+000600 0E06           01030         MOVLW .6
+000602 6E03           01031         MOVWF position,0
+000604 0012           01032         RETURN
+                      01033         
 Warning[207]: Found label after column 1. (SET_NOTE_C2)
-0005F0                01019     SET_NOTE_C2
-0005F0 0E63           01020         MOVLW 'c'
-0005F2 6E0E           01021         MOVWF noteLetter,0
-0005F4 0E07           01022         MOVLW .7
-0005F6 6E03           01023         MOVWF position,0
-0005F8 0012           01024         RETURN
-                      01025     
+000606                01034     SET_NOTE_C2
+000606 0E63           01035         MOVLW 'c'
+000608 6E0E           01036         MOVWF noteLetter,0
+00060A 0E07           01037         MOVLW .7
+00060C 6E03           01038         MOVWF position,0
+00060E 0012           01039         RETURN
+                      01040     
 Warning[205]: Found directive in column 1. (END)
-                      01026 END
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 23
+                      01041 END
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 23
 
 
 SYMBOL TABLE
@@ -1328,8 +1346,8 @@ AN6                               00000001
 AN7                               00000002
 AN8                               00000002
 AN9                               00000003
-ASK_JAVA                          00000110
-AUTOMATIC_LOOP                    0000033C
+ASK_JAVA                          00000126
+AUTOMATIC_LOOP                    00000352
 BANKED                            00000001
 BAUDCON                           00000FB8
 BAUDCTL                           00000FB8
@@ -1337,7 +1355,7 @@ BCLIE                             00000003
 BCLIF                             00000003
 BCLIP                             00000003
 BF                                00000000
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 24
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 24
 
 
 SYMBOL TABLE
@@ -1389,20 +1407,20 @@ CCPR2                             00000FBB
 CCPR2H                            00000FBC
 CCPR2L                            00000FBB
 CFGS                              00000006
-CHANGE_MANUAL_MODE                000000B8
-CHANGE_MODE                       000000CC
-CHECK_CENTRE                      000002CA
-CHECK_LEFT                        0000028A
-CHECK_REC_TIME                    000002EC
-CHECK_RIGHT                       000002AA
-CHECK_SERVO_X                     00000042
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 25
+CHANGE_MANUAL_MODE                000000CE
+CHANGE_MODE                       000000E2
+CHECK_CENTRE                      000002E0
+CHECK_LEFT                        000002A0
+CHECK_REC_TIME                    00000302
+CHECK_RIGHT                       000002C0
+CHECK_SERVO_X                     00000040
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 25
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
-CHECK_SERVO_Y                     0000006E
+CHECK_SERVO_Y                     0000006C
 CHS0                              00000002
 CHS1                              00000003
 CHS2                              00000004
@@ -1420,9 +1438,9 @@ CMCON                             00000FB4
 CMIE                              00000006
 CMIF                              00000006
 CMIP                              00000006
-CONVERT_Letter_Pos                00000558
-CONVERT_POS_TIME                  00000506
-COUNT_X                           0000005E
+CONVERT_Letter_Pos                0000056E
+CONVERT_POS_TIME                  0000051C
+COUNT_X                           0000005C
 COUNT_Y                           00000090
 CREN                              00000004
 CS                                00000002
@@ -1448,14 +1466,14 @@ DDRB                              TRISB
 DDRC                              TRISC
 DDRD                              TRISD
 DDRE                              TRISE
-DEBOUNCE_LOOP                     000000A2
-DELAY_LOOP                        000001B8
-DISABLE_INTERRUPTS_EXCEPT_PWM     0000020C
-DISPLAY_NOTE                      00000276
+DEBOUNCE_LOOP                     000000B8
+DELAY_LOOP                        000001CE
+DISABLE_INTERRUPTS_EXCEPT_PWM     00000222
+DISPLAY_NOTE                      0000028C
 DONE                              00000001
-DONE_DELAY                        000001E2
-DONE_PLAYING                      000001EA
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 26
+DONE_DELAY                        000001F8
+DONE_PLAYING                      00000200
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 26
 
 
 SYMBOL TABLE
@@ -1478,9 +1496,10 @@ EEIE                              00000004
 EEIF                              00000004
 EEIP                              00000004
 EEPGD                             00000007
-ENABLE_INTERRUPTS_EXCEPT_PWM      00000214
-EQ_60                             00000300
-EQ_DELAY                          000001D6
+ENABLE_INTERRUPTS_EXCEPT_PWM      0000022A
+END_SERVO_Y                       000000A0
+EQ_60                             00000316
+EQ_DELAY                          000001EC
 FAST                              00000001
 FERR                              00000002
 FLT0                              00000000
@@ -1503,38 +1522,39 @@ GIE_GIEH                          00000007
 GO                                00000001
 GO_DONE                           00000001
 GO_NOT_DONE                       00000001
-GT_OR_EQ_60                       000002F6
-GT_OR_EQ_DELAY                    000001CC
-HIGH_RSI                          000001F2
-HIT_NOTE                          00000468
-HIT_NOT_PRESSED                   000003FC
+GT_OR_EQ_60                       0000030C
+GT_OR_EQ_DELAY                    000001E2
+HIGH_RSI                          00000208
+HIT_NOTE                          0000047E
+HIT_NOT_PRESSED                   00000412
 HLVDCON                           00000FD2
 HLVDEN                            00000004
 HLVDIE                            00000002
 HLVDIF                            00000002
 HLVDIN                            00000005
-HLVDIP                            00000002
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 27
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 27
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+HLVDIP                            00000002
 HLVDL0                            00000000
 HLVDL1                            00000001
 HLVDL2                            00000002
 HLVDL3                            00000003
+Hit_Counter                       00000022
 IBF                               00000007
 IBOV                              00000005
 IDLEN                             00000007
 INDF0                             00000FEF
 INDF1                             00000FE7
 INDF2                             00000FDF
-INIT_EUSART                       00000234
-INIT_INTERRUPTS                   0000021C
-INIT_OSC                          00000248
-INIT_PORTS                        00000252
-INNER_BOUNCE_LOOP                 000000A6
+INIT_EUSART                       0000024A
+INIT_INTERRUPTS                   00000232
+INIT_OSC                          0000025E
+INIT_PORTS                        00000268
+INNER_BOUNCE_LOOP                 000000BC
 INT0                              00000000
 INT0E                             00000004
 INT0F                             00000001
@@ -1569,16 +1589,16 @@ IRCF0                             00000004
 IRCF1                             00000005
 IRCF2                             00000006
 IRVST                             00000005
-JOYSTICK_INTERNAL_LOOP            00000400
+JOYSTICK_INTERNAL_LOOP            00000416
 KBI0                              00000004
-KBI1                              00000005
-KBI2                              00000006
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 28
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 28
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+KBI1                              00000005
+KBI2                              00000006
 KBI3                              00000007
 LATA                              00000F89
 LATA0                             00000000
@@ -1630,23 +1650,23 @@ LVDL1                             00000001
 LVDL2                             00000002
 LVDL3                             00000003
 LVV0                              00000000
-LVV1                              00000001
-LVV2                              00000002
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 29
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 29
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+LVV1                              00000001
+LVV2                              00000002
 LVV3                              00000003
-MAIN                              00000308
-MAIN_LOOP                         00000326
-MANUAL_JAVA                       0000041C
-MANUAL_JOYSTICK                   000003DA
-MANUAL_LOOP                       000003A6
+MAIN                              0000031E
+MAIN_LOOP                         0000033C
+MANUAL_JAVA                       00000432
+MANUAL_JOYSTICK                   000003F0
+MANUAL_LOOP                       000003BC
 MCLR                              00000003
 N                                 00000004
-NEW_RECORDING                     00000130
+NEW_RECORDING                     00000146
 NOT_A                             00000005
 NOT_ADDRESS                       00000005
 NOT_BOR                           00000000
@@ -1665,10 +1685,10 @@ NOT_TO                            00000003
 NOT_W                             00000002
 NOT_WR                            00000001
 NOT_WRITE                         00000002
-NO_HIT                            000003FE
+NO_HIT                            00000414
 OBF                               00000006
 OERR                              00000001
-OLD_REC                           000000F2
+OLD_REC                           00000108
 OSC1                              00000007
 OSC2                              00000006
 OSCCON                            00000FD3
@@ -1678,7 +1698,7 @@ OSCFIP                            00000007
 OSCTUNE                           00000F9B
 OSTS                              00000003
 OV                                00000003
-OVERRUN                           00000462
+OVERRUN                           00000478
 P                                 00000004
 P1A                               00000002
 P1B                               00000005
@@ -1689,14 +1709,14 @@ P1M1                              00000007
 PC                                00000FF9
 PCFG0                             00000000
 PCFG1                             00000001
-PCFG2                             00000002
-PCFG3                             00000003
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 30
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 30
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+PCFG2                             00000002
+PCFG3                             00000003
 PCL                               00000FF9
 PCLATH                            00000FFA
 PCLATU                            00000FFB
@@ -1718,9 +1738,9 @@ PIE1                              00000F9D
 PIE2                              00000FA0
 PIR1                              00000F9E
 PIR2                              00000FA1
-PLAY_BUTTON_INTERRUPT             00000170
-PLAY_LOOP                         00000192
-PLAY_RECORDING                    00000182
+PLAY_BUTTON_INTERRUPT             00000186
+PLAY_LOOP                         000001A8
+PLAY_RECORDING                    00000198
 PLLEN                             00000006
 PLUSW0                            00000FEB
 PLUSW1                            00000FE3
@@ -1748,14 +1768,14 @@ PRSEN                             00000007
 PSA                               00000003
 PSP0                              00000000
 PSP1                              00000001
-PSP2                              00000002
-PSP3                              00000003
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 31
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 31
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+PSP2                              00000002
+PSP3                              00000003
 PSP4                              00000004
 PSP5                              00000005
 PSP6                              00000006
@@ -1807,14 +1827,14 @@ RCIE                              00000005
 RCIF                              00000005
 RCIP                              00000005
 RCMT                              00000006
-RCON                              00000FD0
-RCREG                             00000FAE
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 32
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 32
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+RCON                              00000FD0
+RCREG                             00000FAE
 RCSTA                             00000FAB
 RD                                00000000
 RD0                               00000000
@@ -1830,11 +1850,11 @@ RE0                               00000000
 RE1                               00000001
 RE2                               00000002
 RE3                               00000003
-READ_VALUE                        0000026C
-RECORD_PRESSED                    00000152
-RECORD_PRESSED_LOOP               00000166
-REC_LEDS                          000003C6
-REC_OVER                          0000047C
+READ_VALUE                        00000282
+RECORD_PRESSED                    00000168
+RECORD_PRESSED_LOOP               0000017C
+REC_LEDS                          000003DC
+REC_OVER                          00000492
 RI                                00000004
 RSEN                              00000001
 RX                                00000007
@@ -1844,7 +1864,7 @@ RXDTP                             00000005
 R_NOT_W                           00000002
 R_W                               00000002
 S                                 00000003
-SAVE_NOTE                         000004AC
+SAVE_NOTE                         000004C2
 SBOREN                            00000006
 SCK                               00000003
 SCKP                              00000004
@@ -1854,30 +1874,30 @@ SCS1                              00000001
 SDA                               00000004
 SDI                               00000004
 SDO                               00000005
-SELECT_MODE                       000003CC
+SELECT_MODE                       000003E2
 SEN                               00000000
 SENDB                             00000003
-SEND_NOTE                         000004D2
-SEND_STOP_JAVA                    0000049E
-SERVO_LOOP_X                      0000004C
-SERVO_LOOP_Y                      00000078
-SERVO_X_COUNT_LOOP                00000060
+SEND_NOTE                         000004E8
+SEND_STOP_JAVA                    000004B4
+SERVO_LOOP_X                      0000004A
+SERVO_LOOP_Y                      00000076
+SERVO_X_COUNT_LOOP                0000005E
 SERVO_Y_COUNT_LOOP                00000092
-SET_NOTE_A                        000005DC
-SET_NOTE_B                        000005E6
-SET_NOTE_C                        000005AA
-SET_NOTE_C2                       000005F0
-SET_NOTE_D                        000005B4
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 33
+SET_NOTE_A                        000005F2
+SET_NOTE_B                        000005FC
+SET_NOTE_C                        000005C0
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 33
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
-SET_NOTE_E                        000005BE
-SET_NOTE_F                        000005C8
-SET_NOTE_G                        000005D2
-SET_RECORDING                     000000E2
+SET_NOTE_C2                       00000606
+SET_NOTE_D                        000005CA
+SET_NOTE_E                        000005D4
+SET_NOTE_F                        000005DE
+SET_NOTE_G                        000005E8
+SET_RECORDING                     000000F8
 SMP                               00000007
 SP0                               00000000
 SP1                               00000001
@@ -1903,6 +1923,7 @@ SSPM3                             00000003
 SSPOV                             00000006
 SSPSTAT                           00000FC7
 STATUS                            00000FD8
+STILL_HITTING                     000000B4
 STKFUL                            00000007
 STKOVF                            00000007
 STKPTR                            00000FFC
@@ -1924,15 +1945,15 @@ T0SE                              00000004
 T13CKI                            00000000
 T1CKI                             00000000
 T1CKPS0                           00000004
-T1CKPS1                           00000005
-T1CON                             00000FCD
-T1OSCEN                           00000003
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 34
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 34
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+T1CKPS1                           00000005
+T1CON                             00000FCD
+T1OSCEN                           00000003
 T1OSI                             00000001
 T1OSO                             00000000
 T1RUN                             00000006
@@ -1983,15 +2004,15 @@ TMR3H                             00000FB3
 TMR3IE                            00000001
 TMR3IF                            00000001
 TMR3IP                            00000001
-TMR3L                             00000FB2
-TMR3ON                            00000000
-TO                                00000003
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 35
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 35
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+TMR3L                             00000FB2
+TMR3ON                            00000000
+TO                                00000003
 TOS                               00000FFD
 TOSH                              00000FFE
 TOSL                              00000FFD
@@ -2042,15 +2063,15 @@ TRISE1                            00000001
 TRISE2                            00000002
 TRMT                              00000001
 TUN0                              00000000
-TUN1                              00000001
-TUN2                              00000002
-TUN3                              00000003
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 36
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 36
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+TUN1                              00000001
+TUN2                              00000002
+TUN3                              00000003
 TUN4                              00000004
 TX                                00000006
 TX9                               00000006
@@ -2070,20 +2091,20 @@ VPP                               00000003
 VREFM                             00000002
 VREFP                             00000003
 W                                 00000000
-WAIT_RX                           0000041E
-WAIT_RX_AUTO                      00000346
-WAIT_RX_AUTO_PLAY                 0000037A
-WAIT_RX_START_REC                 0000011A
-WAIT_TRANS_AUTO                   00000374
-WAIT_TRANS_DELAY_H                000004FC
-WAIT_TRANS_DELAY_L                000004EE
-WAIT_TRANS_NOTE_LETTER            000004E0
-WAIT_TRANS_START_REC              00000114
-WAIT_TRANS_STOP_REC               000004A2
+WAIT_RX                           00000434
+WAIT_RX_AUTO                      0000035C
+WAIT_RX_AUTO_PLAY                 00000390
+WAIT_RX_START_REC                 00000130
+WAIT_TRANS_AUTO                   0000038A
+WAIT_TRANS_DELAY_H                00000512
+WAIT_TRANS_DELAY_L                00000504
+WAIT_TRANS_NOTE_LETTER            000004F6
+WAIT_TRANS_START_REC              0000012A
+WAIT_TRANS_STOP_REC               000004B8
 WCOL                              00000007
 WDTCON                            00000FD1
-WIPE_LOOP                         00000100
-WIPE_RAM                          000000F8
+WIPE_LOOP                         00000116
+WIPE_RAM                          0000010E
 WR                                00000001
 WREG                              00000FE8
 WREN                              00000002
@@ -2101,15 +2122,15 @@ _BOR_NOSLP_2L                     000000FD
 _BOR_OFF_2L                       000000F9
 _BOR_ON_2L                        000000FF
 _BOR_SOFT_2L                      000000FB
-_CCP2MX_RB3_3H                    000000FE
-_CCP2MX_RC1_3H                    000000FF
-_CONFIG1H                         00300001
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 37
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 37
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+_CCP2MX_RB3_3H                    000000FE
+_CCP2MX_RC1_3H                    000000FF
+_CONFIG1H                         00300001
 _CONFIG2H                         00300003
 _CONFIG2L                         00300002
 _CONFIG3H                         00300005
@@ -2160,15 +2181,15 @@ _OSC_ECIO_1H                      000000F5
 _OSC_EC_1H                        000000F4
 _OSC_HSPLL_1H                     000000F6
 _OSC_HS_1H                        000000F2
-_OSC_INTIO1_1H                    000000F9
-_OSC_INTIO2_1H                    000000F8
-_OSC_LP_1H                        000000F0
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 38
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 38
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+_OSC_INTIO1_1H                    000000F9
+_OSC_INTIO2_1H                    000000F8
+_OSC_LP_1H                        000000F0
 _OSC_RCIO_1H                      000000F7
 _OSC_RC_1H                        000000F3
 _OSC_XT_1H                        000000F1
@@ -2209,25 +2230,25 @@ _WRTD_ON_6H                       0000007F
 _XINST_OFF_4L                     000000BF
 _XINST_ON_4L                      000000FF
 __18F4321                         00000001
-check2                            000002DC
+check2                            000002F2
 debouce_counterH                  0000000B
 debouce_counterL                  0000000A
 flags                             00000004
-middle                            000002E8
+middle                            000002FE
 noteLetter                        0000000E
 position                          00000003
 pwmTimeH                          00000020
 pwmTimeL                          00000021
 readH                             00000001
-readL                             00000002
-recordTimeH                       0000000D
-recordTimeL                       0000000C
-MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  21:26:37         PAGE 39
+MPASM 5.86               JOYSTICK TO PWM.ASM   3-30-2022  22:22:51         PAGE 39
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+readL                             00000002
+recordTimeH                       0000000D
+recordTimeL                       0000000C
 savedTimeH                        00000008
 savedTimeL                        00000007
 servoFlags                        00000009
@@ -2235,7 +2256,7 @@ timeNoteH                         00000006
 timeNoteL                         00000005
 
 Errors   :     0
-Warnings :   106 reported,     0 suppressed
+Warnings :   109 reported,     0 suppressed
 Messages :     0 reported,     0 suppressed
 
 
