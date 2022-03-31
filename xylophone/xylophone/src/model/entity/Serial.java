@@ -120,7 +120,7 @@ public class Serial
             selectedPort.readBytes(receivedData, 1);
         }
         catch (InterruptedException ignored) {}
-
+        //System.out.println((char) receivedData[0]);
         return (char) receivedData[0];
     }
 

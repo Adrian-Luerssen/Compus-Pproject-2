@@ -1,0 +1,49 @@
+{
+  "name": "song",
+  "notes": [
+    {
+      "key": "c",
+      "delay": 1544
+    },
+    {
+      "key": "B",
+      "delay": 5244
+    },
+    {
+      "key": "F",
+      "delay": 3364
+    },
+    {
+      "key": "D",
+      "delay": 5184
+    },
+    {
+      "key": "F",
+      "delay": 1464
+    },
+    {
+      "key": "A",
+      "delay": 1780
+    },
+    {
+      "key": "B",
+      "delay": 2592
+    },
+    {
+      "key": "B",
+      "delay": 712
+    },
+    {
+      "key": "C",
+      "delay": 5540
+    },
+    {
+      "key": "c",
+      "delay": 3700
+    },
+    {
+      "key": "B",
+      "delay": 5876
+    }
+  ]
+}

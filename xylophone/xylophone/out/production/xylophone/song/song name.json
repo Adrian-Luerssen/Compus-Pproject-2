@@ -1,0 +1,37 @@
+{
+  "name": "song name",
+  "notes": [
+    {
+      "key": "C",
+      "delay": 5540
+    },
+    {
+      "key": "C",
+      "delay": 2532
+    },
+    {
+      "key": "C",
+      "delay": 2592
+    },
+    {
+      "key": "c",
+      "delay": 7480
+    },
+    {
+      "key": "B",
+      "delay": 1780
+    },
+    {
+      "key": "G",
+      "delay": 2196
+    },
+    {
+      "key": "F",
+      "delay": 6708
+    },
+    {
+      "key": "A",
+      "delay": 8588
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="9">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="11">
         <file>
             <url>joystick%20to%20pwm.asm</url>
             <bookmark id="6">
@@ -33,19 +33,29 @@
                 <line>0</line>
                 <key/>
             </bookmark>
+            <bookmark id="11">
+                <name/>
+                <line>88</line>
+                <key/>
+            </bookmark>
+            <bookmark id="10">
+                <name/>
+                <line>113</line>
+                <key/>
+            </bookmark>
             <bookmark id="9">
                 <name/>
-                <line>303</line>
+                <line>318</line>
                 <key/>
             </bookmark>
             <bookmark id="8">
                 <name/>
-                <line>335</line>
+                <line>350</line>
                 <key/>
             </bookmark>
             <bookmark id="7">
                 <name/>
-                <line>857</line>
+                <line>873</line>
                 <key/>
             </bookmark>
         </file>

@@ -86,7 +86,7 @@ public class XylophoneManager
 
                     serial.sendCharacter('P');
                     note = serial.receiveNote();
-
+                    //System.out.println(note);
                     if (note != 'K') {
                         /* Wrong ACK, end song execution */
                         String errorMessage = "Received character was not ACK (K), aborting execution";
@@ -136,7 +136,11 @@ public class XylophoneManager
             //System.out.println("here - 1");
             while (true)
             {
+                try{
+                    Thread.sleep(5);
+                } catch (Exception ignore){
 
+                }
                 if (serial.isConnected())
                 {
                     //System.out.println("here - 2");
