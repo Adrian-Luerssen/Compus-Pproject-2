@@ -61,9 +61,16 @@ LIST P = PIC18F4321 F = INHX32
     
     TMR0_INTERRUPT
 	BCF INTCON,TMR0IF,0
-	BTG LATD,7,0
-	;CLRF TMR0H,0
-	;CLRF TMR0L,0
+	
+	MOVLW .20
+	ADDWF recordTimeL,1,0
+	;BTFSC STATUS,C,0 
+	;BTG LATD,7,0
+	
+	BTFSC STATUS,C,0 
+	INCF recordTimeH,1,0
+	
+	
 	MOVLW LOW(.25536)
 	MOVWF TMR0L,0
 	MOVLW HIGH(.25536)
@@ -78,10 +85,8 @@ LIST P = PIC18F4321 F = INHX32
 	BCF LATC,1,0
 	
 	
-	MOVLW .20
-	ADDWF recordTimeL,1,0
-	BTFSC STATUS,DC,0
-	INCF recordTimeH,1,0
+	
+	;BTG LATD,7,0
 	
 	RETFIE FAST
 
@@ -564,7 +569,7 @@ LIST P = PIC18F4321 F = INHX32
 	
     CHECK_REC_TIME
 	;checking if > 60000
-		
+	
 	;MOVFF readH,LATA
 	MOVLW HIGH(.60000) ; 11101010
 	CPFSLT recordTimeH,0
@@ -711,7 +716,9 @@ LIST P = PIC18F4321 F = INHX32
 	BTFSC PORTB,3,0
 	GOTO HIT_NOT_PRESSED
 	
+	BTFSS flags,2,0
 	CALL DEBOUNCE_LOOP
+	
 	BTFSC PORTB,3,0 ; if pushbutton is still pressed after debouncing loop then proceed, if not return
 	GOTO HIT_NOT_PRESSED ; if not we havent been pressed
 	
@@ -768,7 +775,7 @@ LIST P = PIC18F4321 F = INHX32
 	    BTFSS PIR1, RCIF, 0
 	    GOTO WAIT_RX
 	
-	
+	;BTG LATC,5,0
 	MOVFF RCREG,readL ; contains the letter sent by the java interface
 	;MOVFF readL,LATD
 	
@@ -803,7 +810,7 @@ LIST P = PIC18F4321 F = INHX32
 	
 	BSF servoFlags,0,0
 	
-	BTFSC flags,4,0
+	;BTFSC flags,4,0
 	
 	CLRF recordTimeL,0
 	CLRF recordTimeH,0
@@ -866,13 +873,13 @@ LIST P = PIC18F4321 F = INHX32
 	BTFSC flags,6,0
 	CALL SEND_NOTE    
 	    
-	CLRF recordTimeH,0
-	CLRF recordTimeL,0
+	
 	CALL ENABLE_INTERRUPTS_EXCEPT_PWM ; re-enable interrupts
 	RETURN
 	
     SEND_NOTE
 	;BTG LATD,7,0
+	
 	CALL CONVERT_POS_TIME
 	MOVFF noteLetter,LATA
 	MOVFF noteLetter,TXREG

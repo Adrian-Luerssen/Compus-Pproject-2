@@ -140,7 +140,7 @@ public class Serial
             selectedPort.readBytes(receivedData, 2);
         }
         catch (InterruptedException ignored) {}
-
+       // System.out.println("Byte 0:"+ Integer.toBinaryString(receivedData[0])+"\nByte 1:"+ Integer.toBinaryString(receivedData[1]));
         return bytesToInt(receivedData);
     }
 

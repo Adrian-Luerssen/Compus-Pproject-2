@@ -52,6 +52,7 @@ public class XylophoneManager
         {
             System.out.println("sending note... " + noteKey.charAt(0));
             serial.sendCharacter(noteKey.charAt(0));
+
         }
     }
 

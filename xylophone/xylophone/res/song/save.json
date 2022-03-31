@@ -1,0 +1,21 @@
+{
+  "name": "save",
+  "notes": [
+    {
+      "key": "C",
+      "delay": 1420
+    },
+    {
+      "key": "C",
+      "delay": 2140
+    },
+    {
+      "key": "C",
+      "delay": 240
+    },
+    {
+      "key": "C",
+      "delay": 2600
+    }
+  ]
+}
