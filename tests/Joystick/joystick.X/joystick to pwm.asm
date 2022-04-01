@@ -78,6 +78,7 @@ LIST P = PIC18F4321 F = INHX32
 	
 	BSF LATC,0,0
 	CALL CHECK_SERVO_X
+	;CALL COUNT_X 
 	BCF LATC,0,0
 	
 	BSF LATC,1,0
@@ -92,13 +93,13 @@ LIST P = PIC18F4321 F = INHX32
 
 	
     CHECK_SERVO_X
-	CALL COUNT_X 
-	CALL COUNT_X
+	
 	CLRF pwmTimeH,0
 	
 	SERVO_LOOP_X
 	;MOVFF pwmTimeH,LATD
-	INCF position,0,0
+	MOVLW .31
+	ADDWF position,0,0
 	SUBWF pwmTimeH,0 ;1
 	BTFSC STATUS,Z,0 ; 3
 	RETURN ; 2 cycles
@@ -109,7 +110,7 @@ LIST P = PIC18F4321 F = INHX32
 	COUNT_X
 	    CLRF pwmTimeL,0
 	    SERVO_X_COUNT_LOOP
-	    MOVLW .50 ; 1 Cycle
+	    MOVLW .10 ; 1 Cycle
 	    SUBWF pwmTimeL,0 ;1
 	    BTFSC STATUS,Z,0 ; 3
 	    RETURN ; 2 cycles
@@ -117,16 +118,14 @@ LIST P = PIC18F4321 F = INHX32
 	    GOTO SERVO_X_COUNT_LOOP ;2
 	
     CHECK_SERVO_Y
-	CALL COUNT_Y 
-	CALL COUNT_Y
 	CLRF pwmTimeH,0
 	
 	SERVO_LOOP_Y
 	;MOVFF pwmTimeH,LATD
 	BTFSS servoFlags,0,0
-	MOVLW .1
-	BTFSC servoFlags,0,0
 	MOVLW .8
+	BTFSC servoFlags,0,0
+	MOVLW .11
 	
 	SUBWF pwmTimeH,0 ;1
 	BTFSC STATUS,Z,0 ; 3
@@ -138,7 +137,7 @@ LIST P = PIC18F4321 F = INHX32
 	COUNT_Y
 	    CLRF pwmTimeL,0
 	    SERVO_Y_COUNT_LOOP
-	    MOVLW .50 ; number to count to before 16ms has passed - 1 Cycle
+	    MOVLW .46 ; number to count to before 16ms has passed - 1 Cycle
 	    SUBWF pwmTimeL,0 ;1
 	    BTFSC STATUS,Z,0 ; 3
 	    RETURN ; 2 cycles
@@ -149,7 +148,7 @@ LIST P = PIC18F4321 F = INHX32
 	BTFSS servoFlags,0,0
 	RETURN
 	
-	MOVLW .20
+	MOVLW .50
 	SUBWF Hit_Counter,0,0
 	BTFSS STATUS,Z,0
 	GOTO STILL_HITTING
@@ -501,7 +500,7 @@ LIST P = PIC18F4321 F = INHX32
 	MOVLW .1
 	CPFSLT readH,0
 	RETURN
-	MOVLW LOW(.100)
+	MOVLW .125
 	CPFSLT readL,0
 	RETURN
 	; threshold for centre is left < 100
