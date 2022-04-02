@@ -98,7 +98,7 @@ LIST P = PIC18F4321 F = INHX32
 	
 	SERVO_LOOP_X
 	;MOVFF pwmTimeH,LATD
-	MOVLW .2
+	MOVLW .32
 	ADDWF position,0,0
 	SUBWF pwmTimeH,0 ;1
 	BTFSC STATUS,Z,0 ; 3
@@ -110,7 +110,7 @@ LIST P = PIC18F4321 F = INHX32
 	COUNT_X
 	    CLRF pwmTimeL,0
 	    SERVO_X_COUNT_LOOP
-	    MOVLW .60 ; 1 Cycle
+	    MOVLW .10 ; 1 Cycle
 	    SUBWF pwmTimeL,0 ;1
 	    BTFSC STATUS,Z,0 ; 3
 	    RETURN ; 2 cycles

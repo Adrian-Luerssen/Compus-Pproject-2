@@ -1,4 +1,4 @@
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE  1
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -57,7 +57,7 @@ Warning[207]: Found label after column 1. (debouce_counterH)
                       00026     
                       00027  
 Warning[207]: Found label after column 1. (recordTimeL)
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE  2
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -116,7 +116,7 @@ Warning[207]: Found label after column 1. (TMR0_INTERRUPT)
                       00068         ;BTG LATD,7,0
                       00069         
 000020 B0D8           00070         BTFSC STATUS,C,0 
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE  3
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE  3
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -154,7 +154,7 @@ Warning[207]: Found label after column 1. (CHECK_SERVO_X)
 Warning[207]: Found label after column 1. (SERVO_LOOP_X)
 000040                00099         SERVO_LOOP_X
                       00100         ;MOVFF pwmTimeH,LATD
-000040 0E02           00101         MOVLW .2
+000040 0E20           00101         MOVLW .32
 000042 2403           00102         ADDWF position,0,0
 000044 5C20           00103         SUBWF pwmTimeH,0 ;1
 000046 B4D8           00104         BTFSC STATUS,Z,0 ; 3
@@ -168,14 +168,14 @@ Warning[207]: Found label after column 1. (COUNT_X)
 000054 6A21           00111             CLRF pwmTimeL,0
 Warning[207]: Found label after column 1. (SERVO_X_COUNT_LOOP)
 000056                00112             SERVO_X_COUNT_LOOP
-000056 0E3C           00113             MOVLW .60 ; 1 Cycle
+000056 0E0A           00113             MOVLW .10 ; 1 Cycle
 000058 5C21           00114             SUBWF pwmTimeL,0 ;1
 00005A B4D8           00115             BTFSC STATUS,Z,0 ; 3
 00005C 0012           00116             RETURN ; 2 cycles
 00005E 2A21           00117             INCF pwmTimeL,1,0 ; 1 cycle
 000060 EF?? F???      00118             GOTO SERVO_X_COUNT_LOOP ;2
                       00119         
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE  4
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE  4
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -234,7 +234,7 @@ Warning[207]: Found label after column 1. (DEBOUNCE_LOOP)
 0000A8                00163     DEBOUNCE_LOOP
                       00164         ; (1 + (1 + 1 + 3 + 1 + 2 + 8)*a + 2)*Fosc = 16ms
 0000A8 6A0A           00165         CLRF debouce_counterL,0 ; 1 cycle
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE  5
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE  5
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -293,7 +293,7 @@ Warning[207]: Found label after column 1. (SET_RECORDING)
 0000E8                00210     SET_RECORDING
                       00211                 
 0000E8 B604           00212         BTFSC flags,3,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE  6
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE  6
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -352,7 +352,7 @@ Warning[207]: Found label after column 1. (WAIT_RX_START_REC)
                       00257         
 000126 0E4B           00258         MOVLW 'K'
 000128 5CAE           00259         SUBWF RCREG,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE  7
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE  7
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -411,7 +411,7 @@ Warning[207]: Found label after column 1. (RECORD_PRESSED_LOOP)
                       00307         
                       00308         ;MOVFF flags,PORTA
 000172 EF?? F???      00309         GOTO MAIN_LOOP
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE  8
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE  8
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -470,7 +470,7 @@ Warning[207]: Found label after column 1. (DELAY_LOOP)
 0001BE                00355             DELAY_LOOP
                       00356                 
 0001BE C00D F001      00357                 MOVFF recordTimeH,readH
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE  9
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE  9
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -529,7 +529,7 @@ Warning[207]: Found label after column 1. (HIGH_RSI)
 0001FE B2F0           00403         BTFSC INTCON3,INT2IF,0
 000200 EC?? F???      00404         CALL CHANGE_MODE
 000204 B2F2           00405         BTFSC INTCON,INT0IF,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 10
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 10
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -588,7 +588,7 @@ Warning[207]: Found label after column 1. (INIT_EUSART)
                       00452         ;MOVLW b'00000000'
                       00453         ;MOVWF SPBRGH,0
 00024A 6AB0           00454         CLRF SPBRGH,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 11
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 11
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -647,7 +647,7 @@ Warning[207]: Found label after column 1. (CHECK_LEFT)
 000290 0E01           00500         MOVLW .1
 000292 6001           00501         CPFSLT readH,0
 000294 0012           00502         RETURN
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 12
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 12
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -706,7 +706,7 @@ Warning[207]: Found label after column 1. (CHECK_CENTRE)
 0002DC 0012           00551         RETURN
 0002DE EF?? F???      00552         GOTO middle
                       00553         
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 13
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 13
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -765,7 +765,7 @@ Warning[207]: Found label after column 1. (MAIN)
 00031E EC?? F???      00598         CALL INIT_EUSART
 000322 8AF2           00599         BSF INTCON, TMR0IE,0
 000324 EC?? F???      00600         CALL DISPLAY_NOTE
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 14
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 14
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -824,7 +824,7 @@ Warning[207]: Found label after column 1. (WAIT_RX_AUTO)
 Warning[207]: Found label after column 1. (WAIT_TRANS_AUTO)
 00037A                00648         WAIT_TRANS_AUTO
 00037A A2AC           00649             BTFSS TXSTA, 1, 0
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 15
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 15
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -883,7 +883,7 @@ Warning[207]: Found label after column 1. (MANUAL_LOOP)
 Warning[207]: Found label after column 1. (REC_LEDS)
 0003CC                00698         REC_LEDS
 0003CC 848B           00699         BSF LATC,2,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 16
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 16
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -942,7 +942,7 @@ Warning[207]: Found label after column 1. (JOYSTICK_INTERNAL_LOOP)
 000418 EC?? F???      00744         CALL CHECK_LEFT
                       00745         
 00041C A004           00746         BTFSS flags,0,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 17
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 17
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1001,7 +1001,7 @@ Warning[207]: Found label after column 1. (WAIT_RX)
                       00795         
 Warning[207]: Found label after column 1. (OVERRUN)
 000466                00796     OVERRUN
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 18
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 18
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1060,7 +1060,7 @@ Warning[207]: Found label after column 1. (SEND_STOP_JAVA)
                       00844         ;BSF LATD,7,0
 0004A0 0E53           00845         MOVLW 'S'
 0004A2 6EAD           00846         MOVWF TXREG,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 19
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 19
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1119,7 +1119,7 @@ Warning[207]: Found label after column 1. (WAIT_TRANS_NOTE_LETTER)
                       00893         
                       00894         ;MOVFF recordTimeL,LATA
 0004E2 C00C FFAD      00895         MOVFF recordTimeL, TXREG
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 20
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 20
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1178,7 +1178,7 @@ Warning[207]: Found label after column 1. (CONVERT_POS_TIME)
 00053E 5C03           00943         SUBWF position,0
 000540 B4D8           00944         BTFSC STATUS,Z,0
 000542 EC?? F???      00945         CALL SET_NOTE_B
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 21
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 21
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1237,7 +1237,7 @@ Warning[207]: Found label after column 1. (CONVERT_Letter_Pos)
 Warning[207]: Found label after column 1. (SET_NOTE_C)
 0005A4                00995     SET_NOTE_C
 0005A4 0E43           00996         MOVLW 'C'
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 22
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 22
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1296,7 +1296,7 @@ Warning[207]: Found label after column 1. (SET_NOTE_C2)
 0005EA                01040     SET_NOTE_C2
 0005EA 0E63           01041         MOVLW 'c'
 0005EC 6E0E           01042         MOVWF noteLetter,0
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 23
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 23
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1308,7 +1308,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       01046     
 Warning[205]: Found directive in column 1. (END)
                       01047 END
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 24
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 24
 
 
 SYMBOL TABLE
@@ -1367,7 +1367,7 @@ BCLIE                             00000003
 BCLIF                             00000003
 BCLIP                             00000003
 BF                                00000000
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 25
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 25
 
 
 SYMBOL TABLE
@@ -1426,7 +1426,7 @@ CHECK_LEFT                        00000290
 CHECK_REC_TIME                    000002F2
 CHECK_RIGHT                       000002B0
 CHECK_SERVO_X                     0000003E
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 26
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 26
 
 
 SYMBOL TABLE
@@ -1485,7 +1485,7 @@ DISPLAY_NOTE                      0000027C
 DONE                              00000001
 DONE_DELAY                        000001E8
 DONE_PLAYING                      000001F0
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 27
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 27
 
 
 SYMBOL TABLE
@@ -1544,7 +1544,7 @@ HLVDEN                            00000004
 HLVDIE                            00000002
 HLVDIF                            00000002
 HLVDIN                            00000005
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 28
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 28
 
 
 SYMBOL TABLE
@@ -1603,7 +1603,7 @@ IRCF2                             00000006
 IRVST                             00000005
 JOYSTICK_INTERNAL_LOOP            00000408
 KBI0                              00000004
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 29
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 29
 
 
 SYMBOL TABLE
@@ -1662,7 +1662,7 @@ LVDL1                             00000001
 LVDL2                             00000002
 LVDL3                             00000003
 LVV0                              00000000
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 30
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 30
 
 
 SYMBOL TABLE
@@ -1721,7 +1721,7 @@ P1M1                              00000007
 PC                                00000FF9
 PCFG0                             00000000
 PCFG1                             00000001
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 31
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 31
 
 
 SYMBOL TABLE
@@ -1780,7 +1780,7 @@ PRSEN                             00000007
 PSA                               00000003
 PSP0                              00000000
 PSP1                              00000001
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 32
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 32
 
 
 SYMBOL TABLE
@@ -1839,7 +1839,7 @@ RCIE                              00000005
 RCIF                              00000005
 RCIP                              00000005
 RCMT                              00000006
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 33
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 33
 
 
 SYMBOL TABLE
@@ -1898,7 +1898,7 @@ SERVO_Y_COUNT_LOOP                00000082
 SET_NOTE_A                        000005D6
 SET_NOTE_B                        000005E0
 SET_NOTE_C                        000005A4
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 34
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 34
 
 
 SYMBOL TABLE
@@ -1957,7 +1957,7 @@ T0SE                              00000004
 T13CKI                            00000000
 T1CKI                             00000000
 T1CKPS0                           00000004
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 35
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 35
 
 
 SYMBOL TABLE
@@ -2016,7 +2016,7 @@ TMR3H                             00000FB3
 TMR3IE                            00000001
 TMR3IF                            00000001
 TMR3IP                            00000001
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 36
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 36
 
 
 SYMBOL TABLE
@@ -2075,7 +2075,7 @@ TRISE1                            00000001
 TRISE2                            00000002
 TRMT                              00000001
 TUN0                              00000000
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 37
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 37
 
 
 SYMBOL TABLE
@@ -2134,7 +2134,7 @@ _BOR_NOSLP_2L                     000000FD
 _BOR_OFF_2L                       000000F9
 _BOR_ON_2L                        000000FF
 _BOR_SOFT_2L                      000000FB
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 38
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 38
 
 
 SYMBOL TABLE
@@ -2193,7 +2193,7 @@ _OSC_ECIO_1H                      000000F5
 _OSC_EC_1H                        000000F4
 _OSC_HSPLL_1H                     000000F6
 _OSC_HS_1H                        000000F2
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 39
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 39
 
 
 SYMBOL TABLE
@@ -2252,7 +2252,7 @@ position                          00000003
 pwmTimeH                          00000020
 pwmTimeL                          00000021
 readH                             00000001
-MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:09:42         PAGE 40
+MPASM 5.86               JOYSTICK TO PWM.ASM   4-2-2022  10:54:41         PAGE 40
 
 
 SYMBOL TABLE
